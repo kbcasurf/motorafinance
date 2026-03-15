@@ -4,7 +4,7 @@
 **Last updated:** 2026-03-15
 **Approach:** Vertical slices — each phase delivers end-to-end working features
 **PRD Reference:** `prd.md` (v2.0.0)
-**Current phase:** Phase 4 — Dashboard
+**Current phase:** Phase 5 — Settings + Export
 
 ---
 
@@ -57,20 +57,20 @@
 
 ---
 
-## Phase 4: Dashboard
+## Phase 4: Dashboard ✅ COMPLETE (2026-03-15)
 
 **Goal:** Financial overview with period selection, KPIs, and charts.
 
-- [ ] 4.1 — Report queries (`src/db/queries/reports.ts` — aggregations by period)
-- [ ] 4.2 — Period filter hook (`src/hooks/usePeriodFilter.ts` — daily/weekly/monthly)
-- [ ] 4.3 — Calculation utils (`src/utils/calculations.ts` — net profit, cost/km, revenue/km)
-- [ ] 4.4 — Period selector component
-- [ ] 4.5 — Summary cards (gross revenue, expenses, net profit with color coding)
-- [ ] 4.6 — KPI indicators (R$/km, cost/km, total km)
-- [ ] 4.7 — Victory Native XL bar chart (revenue × expenses × profit over time)
-- [ ] 4.8 — Monthly goal progress bar
-- [ ] 4.9 — Empty state with call-to-action
-- [ ] 4.10 — Dashboard screen (`app/(tabs)/index.tsx`)
+- [x] 4.1 — Report queries (`src/db/queries/reports.ts` — aggregations by period)
+- [x] 4.2 — Period filter hook (`src/hooks/usePeriodFilter.ts` — daily/weekly/monthly)
+- [x] 4.3 — Calculation utils (`src/utils/calculations.ts` — net profit, cost/km, revenue/km)
+- [x] 4.4 — Period selector component
+- [x] 4.5 — Summary cards (gross revenue, expenses, net profit with color coding)
+- [x] 4.6 — KPI indicators (R$/km, cost/km, total km)
+- [x] 4.7 — Victory Native XL bar chart (revenue × expenses × profit over time)
+- [x] 4.8 — Monthly goal progress bar
+- [x] 4.9 — Empty state with call-to-action
+- [x] 4.10 — Dashboard screen (`app/(tabs)/index.tsx`)
 
 ---
 
