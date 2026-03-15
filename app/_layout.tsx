@@ -7,6 +7,7 @@ import { openDatabaseSync } from 'expo-sqlite';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import migrations from '../drizzle/migrations';
 import { useSettingsStore } from '../src/stores/useSettingsStore';
+import { useThemeColors } from '../src/theme';
 
 const expo = openDatabaseSync('driverfinance.db', {
   enableChangeListener: true,
@@ -17,6 +18,7 @@ export const db = drizzle(expo);
 export default function RootLayout() {
   const { success, error } = useMigrations(db, migrations);
   const hydrateSettings = useSettingsStore((s) => s.hydrate);
+  const colors = useThemeColors();
 
   useEffect(() => {
     if (success) {
@@ -26,18 +28,18 @@ export default function RootLayout() {
 
   if (error) {
     return (
-      <View style={styles.center}>
-        <Text style={styles.error}>Erro ao inicializar banco de dados</Text>
-        <Text style={styles.errorDetail}>{error.message}</Text>
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
+        <Text style={[styles.error, { color: colors.negative }]}>Erro ao inicializar banco de dados</Text>
+        <Text style={[styles.errorDetail, { color: colors.textSecondary }]}>{error.message}</Text>
       </View>
     );
   }
 
   if (!success) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" />
-        <Text style={styles.loading}>Carregando...</Text>
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={[styles.loading, { color: colors.textSecondary }]}>Carregando...</Text>
       </View>
     );
   }
@@ -53,7 +55,7 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  loading: { marginTop: 16, fontSize: 16, color: '#6B7280' },
-  error: { fontSize: 18, fontWeight: 'bold', color: '#DC2626' },
-  errorDetail: { marginTop: 8, fontSize: 14, color: '#6B7280' },
+  loading: { marginTop: 16, fontSize: 16 },
+  error: { fontSize: 18, fontWeight: 'bold' },
+  errorDetail: { marginTop: 8, fontSize: 14 },
 });
