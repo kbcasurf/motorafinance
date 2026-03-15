@@ -4,7 +4,7 @@
 **Last updated:** 2026-03-15
 **Approach:** Vertical slices — each phase delivers end-to-end working features
 **PRD Reference:** `prd.md` (v2.0.0)
-**Current phase:** Phase 2 — Income (Receitas)
+**Current phase:** Phase 4 — Dashboard
 
 ---
 
@@ -41,19 +41,19 @@
 
 ---
 
-## Phase 3: Expenses (Despesas)
+## Phase 3: Expenses (Despesas) ✅ COMPLETE (2026-03-15)
 
 **Goal:** Full CRUD for expenses with fuel sub-fields and custom categories.
 
-- [ ] 3.1 — Expense queries (`src/db/queries/expenses.ts` — insert, update, delete, getById)
-- [ ] 3.2 — Expense Zustand store (`src/stores/useExpenseStore.ts`)
-- [ ] 3.3 — Live query hook (`src/hooks/useLiveExpenses.ts`)
-- [ ] 3.4 — Custom categories queries (`src/db/queries/categories.ts`)
-- [ ] 3.5 — Expense form component (`src/components/forms/ExpenseForm.tsx` — with fuel conditional fields)
-- [ ] 3.6 — New expense screen (`app/(tabs)/(expenses)/new.tsx`)
-- [ ] 3.7 — Edit expense screen (`app/(tabs)/(expenses)/[id].tsx`)
-- [ ] 3.8 — Expense list screen (`app/(tabs)/(expenses)/index.tsx` — swipe-to-delete, category filter)
-- [ ] 3.9 — Expense stack layout (`app/(tabs)/(expenses)/_layout.tsx`)
+- [x] 3.1 — Expense queries (`src/db/queries/expenses.ts` — insert, update, delete, getById)
+- [x] 3.2 — Expense Zustand store (`src/stores/useExpenseStore.ts`)
+- [x] 3.3 — Live query hook (`src/hooks/useLiveExpenses.ts`)
+- [x] 3.4 — Custom categories queries (`src/db/queries/categories.ts`)
+- [x] 3.5 — Expense form component (`src/components/forms/ExpenseForm.tsx` — with fuel conditional fields)
+- [x] 3.6 — New expense screen (`app/(tabs)/(expenses)/new.tsx`)
+- [x] 3.7 — Edit expense screen (`app/(tabs)/(expenses)/[id].tsx`)
+- [x] 3.8 — Expense list screen (`app/(tabs)/(expenses)/index.tsx` — swipe-to-delete, category filter)
+- [x] 3.9 — Expense stack layout (`app/(tabs)/(expenses)/_layout.tsx`)
 
 ---
 
