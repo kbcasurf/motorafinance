@@ -26,17 +26,17 @@ Run `npx expo start` on a physical Android and iOS device. Walk the full user fl
 **Why blocking:** Catches device-specific rendering or interaction bugs before any build is distributed.
 
 ### 2. EAS build (Android + iOS)
-Run `npx eas build --platform android --profile preview` and the iOS equivalent. Verify the APK/IPA installs and runs correctly outside of Expo Go.
+Run `npx eas build --platform android --profile preview` and `npx eas build --platform ios --profile preview`. Verify the APK installs on Android and the IPA installs via TestFlight or direct install on iOS outside of Expo Go.
 
 **Why blocking:** The app cannot be distributed or tested on real devices without a native build.
 
 ### 3. Push to GitHub and verify CI
-Create a remote repository, push all code, and confirm that the GitHub Actions CI workflow passes (type-check + tests).
+Create a remote repository, push all code, and confirm that the existing GitHub Actions CI workflow (`.github/workflows/ci.yml`) passes — type-check and all 22 unit tests must be green.
 
-**Why blocking:** Required for traceability, collaboration, and release confidence.
+**Why blocking:** The CI workflow already exists in the repo but has never run against the remote. If it is broken and undetected, future maintenance and any automated build triggers become unreliable.
 
 ### 4. Tab bar icons
-Add proper icons to the 4 tab bar entries using `@expo/vector-icons` (Ionicons). Suggested mapping:
+Install `@expo/vector-icons` (`npx expo install @expo/vector-icons`), then add Ionicons to the 4 tab bar entries. Suggested mapping:
 - Dashboard → `bar-chart`
 - Receitas → `cash`
 - Despesas → `wallet`
@@ -45,7 +45,7 @@ Add proper icons to the 4 tab bar entries using `@expo/vector-icons` (Ionicons).
 **Why blocking:** Icon-less tabs are a visually unfinished UI pattern that users notice immediately on a real device.
 
 ### 5. Native date/time pickers
-Replace plain text date/time inputs in `IncomeForm.tsx` and `ExpenseForm.tsx` with native pickers using `@react-native-community/datetimepicker` or `expo-date-picker`.
+Install `@react-native-community/datetimepicker` (`npx expo install @react-native-community/datetimepicker`), then replace plain text date/time inputs in `IncomeForm.tsx` and `ExpenseForm.tsx` with the native picker component. Use `npx expo install` (not `npm install`) to ensure the SDK-compatible version is pinned.
 
 **Why blocking:** Text-based date input on a touchscreen device is a broken UX pattern — users expect the native date picker wheel.
 
@@ -59,7 +59,7 @@ These items are documented and prioritized but will not block the v1.0 release.
 |---|------|-------|
 | 1 | Platform/category filters on list screens | PRD RF-04.1/RF-04.2 — useful but current monthly view works |
 | 2 | Period-aware list screens | Nice-to-have sync with dashboard period selector |
-| 3 | Localized number input (currency mask) | UX polish via `react-native-mask-input` |
+| 3 | Localized number input (currency mask) | UX polish via `react-native-mask-input`. Note: current inputs accept raw integer values (e.g. `15050` = R$150,50); formatting is display-only via `src/utils/currency.ts`. |
 | 4 | Onboarding flow | App is simple enough to use without first-launch guidance |
 | 5 | Backup/restore (SQLite export/import) | Power-user feature, not MVP critical |
 | 6 | Accessibility audit | Important iteration item post-release |
