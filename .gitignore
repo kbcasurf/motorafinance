@@ -39,3 +39,20 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Claude Code
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Secrets
+.env
+.env.*
+*.p8
+*.p12
+*.pem
+*.key
+*.mobileprovision
+
+# EAS / Expo
+.expo/
+dist/
