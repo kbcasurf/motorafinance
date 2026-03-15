@@ -7,7 +7,7 @@ export function computeTotalKm(
 ): number {
   return incomes.reduce((sum, row) => {
     if (row.odoStart != null && row.odoEnd != null) {
-      return sum + (row.odoEnd - row.odoStart);
+      return sum + Math.max(0, row.odoEnd - row.odoStart);
     }
     return sum;
   }, 0);

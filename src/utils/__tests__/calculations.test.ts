@@ -34,6 +34,11 @@ describe('calculations', () => {
       const incomes = [{ odoStart: null, odoEnd: null }];
       expect(computeTotalKm(incomes)).toBe(0);
     });
+
+    it('ignores entries where odoEnd is less than odoStart', () => {
+      const incomes = [{ odoStart: 1100, odoEnd: 1000 }];
+      expect(computeTotalKm(incomes)).toBe(0);
+    });
   });
 
   describe('computeCostPerKm', () => {
