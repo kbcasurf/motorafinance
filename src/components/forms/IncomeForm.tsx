@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { format } from 'date-fns';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
+import { DatePickerField, TimePickerField } from '../ui/DatePickerField';
 import { useThemeColors, spacing, fontSize, borderRadius } from '../../theme';
 import { parseCurrencyToCents, centsToDecimal } from '../../utils/currency';
 import { PLATFORMS } from '../../constants/categories';
@@ -156,21 +157,10 @@ export function IncomeForm({
 
       <View style={styles.row}>
         <View style={styles.halfField}>
-          <Input
-            label="Data"
-            value={date}
-            onChangeText={setDate}
-            placeholder="AAAA-MM-DD"
-            error={errors.date}
-          />
+          <DatePickerField label="Data" value={date} onChange={setDate} error={errors.date} />
         </View>
         <View style={styles.halfField}>
-          <Input
-            label="Hora"
-            value={time}
-            onChangeText={setTime}
-            placeholder="HH:mm"
-          />
+          <TimePickerField label="Hora" value={time} onChange={setTime} />
         </View>
       </View>
 

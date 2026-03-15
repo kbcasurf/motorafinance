@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors } from '../../src/theme';
 
 export default function TabLayout() {
@@ -23,6 +24,9 @@ export default function TabLayout() {
         options={{
           title: 'Dashboard',
           tabBarLabel: 'Dashboard',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bar-chart-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -30,6 +34,9 @@ export default function TabLayout() {
         options={{
           title: 'Receitas',
           tabBarLabel: 'Receitas',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="cash-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -37,6 +44,9 @@ export default function TabLayout() {
         options={{
           title: 'Despesas',
           tabBarLabel: 'Despesas',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="wallet-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -44,6 +54,9 @@ export default function TabLayout() {
         options={{
           title: 'Ajustes',
           tabBarLabel: 'Ajustes',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>

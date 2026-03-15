@@ -11,6 +11,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.1.1",
+    "@react-native-community/datetimepicker": "8.6.0",
     "@shopify/react-native-skia": "^2.5.1",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.1",
