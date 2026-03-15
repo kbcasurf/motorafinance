@@ -4,7 +4,7 @@
 **Last updated:** 2026-03-15
 **Approach:** Vertical slices — each phase delivers end-to-end working features
 **PRD Reference:** `prd.md` (v2.0.0)
-**Current phase:** Phase 5 — Settings + Export
+**Current phase:** Phase 6 — Polish
 
 ---
 
@@ -74,17 +74,17 @@
 
 ---
 
-## Phase 5: Settings + Export
+## Phase 5: Settings + Export ✅ COMPLETE (2026-03-15)
 
 **Goal:** User preferences, custom categories management, CSV export, data wipe.
 
-- [ ] 5.1 — Settings Zustand store (`src/stores/useSettingsStore.ts`)
-- [ ] 5.2 — Settings queries (read/write key-value pairs)
-- [ ] 5.3 — CSV export utility (`src/utils/export.ts`)
-- [ ] 5.4 — Settings screen (`app/(tabs)/settings.tsx` — driver name, vehicle, monthly goal)
-- [ ] 5.5 — Custom categories management UI
-- [ ] 5.6 — CSV export with share sheet integration
-- [ ] 5.7 — Data wipe with 2-step confirmation
+- [x] 5.1 — Settings Zustand store (`src/stores/useSettingsStore.ts`)
+- [x] 5.2 — Settings queries (read/write key-value pairs)
+- [x] 5.3 — CSV export utility (`src/utils/export.ts`)
+- [x] 5.4 — Settings screen (`app/(tabs)/settings.tsx` — driver name, vehicle, monthly goal)
+- [x] 5.5 — Custom categories management UI
+- [x] 5.6 — CSV export with share sheet integration
+- [x] 5.7 — Data wipe with 2-step confirmation
 
 ---
 
