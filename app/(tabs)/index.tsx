@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSettingsStore } from '../../src/stores/useSettingsStore';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useLiveIncomes } from '../../src/hooks/useLiveIncomes';
 import { useLiveExpenses } from '../../src/hooks/useLiveExpenses';
@@ -17,7 +18,6 @@ import { GoalProgress } from '../../src/components/dashboard/GoalProgress';
 import {
   getDailyIncomeTotals,
   getDailyExpenseTotals,
-  getSettingValue,
 } from '../../src/db/queries/reports';
 import type { DailyAggregate } from '../../src/db/queries/reports';
 import { useThemeColors, spacing, fontSize } from '../../src/theme';
@@ -30,7 +30,8 @@ export default function DashboardScreen() {
 
   const [incomeByDay, setIncomeByDay] = useState<DailyAggregate[]>([]);
   const [expensesByDay, setExpensesByDay] = useState<DailyAggregate[]>([]);
-  const [monthlyGoal, setMonthlyGoal] = useState<number | null>(null);
+  const monthlyGoalStr = useSettingsStore((s) => s.monthlyGoal);
+  const monthlyGoal = monthlyGoalStr ? parseInt(monthlyGoalStr, 10) : null;
 
   // Load chart aggregates and goal when period changes
   useEffect(() => {
@@ -48,14 +49,6 @@ export default function DashboardScreen() {
       cancelled = true;
     };
   }, [period.startDate, period.endDate, incomesUpdatedAt, expensesUpdatedAt]);
-
-  useEffect(() => {
-    getSettingValue('monthly_goal').then((val) => {
-      if (!val) return setMonthlyGoal(null);
-      const parsed = parseInt(val, 10);
-      setMonthlyGoal(Number.isFinite(parsed) ? parsed : null);
-    });
-  }, []);
 
   const totalRevenue = incomes.reduce((sum, r) => sum + r.amount, 0);
   const totalExpenses = expensesList.reduce((sum, e) => sum + e.amount, 0);
