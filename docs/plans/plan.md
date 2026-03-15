@@ -1,41 +1,43 @@
 # DriverFinance — Implementation Plan
 
 **Created:** 2026-03-15
+**Last updated:** 2026-03-15
 **Approach:** Vertical slices — each phase delivers end-to-end working features
 **PRD Reference:** `prd.md` (v2.0.0)
+**Current phase:** Phase 2 — Income (Receitas)
 
 ---
 
-## Phase 1: Foundation
+## Phase 1: Foundation ✅ COMPLETE (2026-03-15)
 
 **Goal:** Running Expo app with project structure, DB initialized, theme system, and navigation shell.
 
 - [x] 1.1 — Scaffold Expo project (`create-expo-app` blank-typescript)
-- [ ] 1.2 — Install all dependencies (production + dev)
-- [ ] 1.3 — Create config files (`CLAUDE.md`, `.claude/settings.json`, `.mcp.json`, `.gitignore`, `.prettierrc`, `drizzle.config.ts`)
-- [ ] 1.4 — Setup theme system (`src/theme/index.ts` — light/dark colors, spacing, typography)
-- [ ] 1.5 — Setup DB layer (`src/db/schema.ts`, `src/db/client.ts`) with all 4 tables
-- [ ] 1.6 — Generate first migration via `drizzle-kit`
-- [ ] 1.7 — Create navigation shell (Expo Router tabs: Dashboard, Receitas, Despesas, Configurações)
-- [ ] 1.8 — Create base UI components (`src/components/ui/` — Card, Button, Input)
-- [ ] 1.9 — Create utility functions (`src/utils/currency.ts`)
-- [ ] 1.10 — Create constants (`src/constants/categories.ts`)
-- [ ] 1.11 — Git init + first commit
+- [x] 1.2 — Install all dependencies (production + dev)
+- [x] 1.3 — Create config files (`CLAUDE.md`, `.claude/settings.json`, `.mcp.json`, `.gitignore`, `.prettierrc`, `drizzle.config.ts`)
+- [x] 1.4 — Setup theme system (`src/theme/index.ts` — light/dark colors, spacing, typography)
+- [x] 1.5 — Setup DB layer (`src/db/schema.ts`, `src/db/client.ts`) with all 4 tables
+- [x] 1.6 — Generate first migration via `drizzle-kit`
+- [x] 1.7 — Create navigation shell (Expo Router tabs: Dashboard, Receitas, Despesas, Configurações)
+- [x] 1.8 — Create base UI components (`src/components/ui/` — Card, Button, Input)
+- [x] 1.9 — Create utility functions (`src/utils/currency.ts` + tests)
+- [x] 1.10 — Create constants (`src/constants/categories.ts`)
+- [x] 1.11 — Git init + first commit (14 commits total)
 
 ---
 
-## Phase 2: Income (Receitas)
+## Phase 2: Income (Receitas) ✅ COMPLETE (2026-03-15)
 
 **Goal:** Full CRUD for ride income entries with smart defaults.
 
-- [ ] 2.1 — Income queries (`src/db/queries/income.ts` — insert, update, delete, getById)
-- [ ] 2.2 — Income Zustand store (`src/stores/useIncomeStore.ts` — UI state, last platform, last odometer)
-- [ ] 2.3 — Live query hook (`src/hooks/useLiveIncomes.ts`)
-- [ ] 2.4 — Income form component (`src/components/forms/IncomeForm.tsx` — with validation)
-- [ ] 2.5 — New income screen (`app/(tabs)/(income)/new.tsx` — smart defaults: date/time, last platform, last odometer)
-- [ ] 2.6 — Edit income screen (`app/(tabs)/(income)/[id].tsx`)
-- [ ] 2.7 — Income list screen (`app/(tabs)/(income)/index.tsx` — chronological reverse, swipe-to-delete)
-- [ ] 2.8 — Income stack layout (`app/(tabs)/(income)/_layout.tsx`)
+- [x] 2.1 — Income queries (`src/db/queries/income.ts` — insert, update, delete, getById)
+- [x] 2.2 — Income Zustand store (`src/stores/useIncomeStore.ts` — UI state, last platform, last odometer)
+- [x] 2.3 — Live query hook (`src/hooks/useLiveIncomes.ts`)
+- [x] 2.4 — Income form component (`src/components/forms/IncomeForm.tsx` — with validation)
+- [x] 2.5 — New income screen (`app/(tabs)/(income)/new.tsx` — smart defaults: date/time, last platform, last odometer)
+- [x] 2.6 — Edit income screen (`app/(tabs)/(income)/[id].tsx`)
+- [x] 2.7 — Income list screen (`app/(tabs)/(income)/index.tsx` — chronological reverse, swipe-to-delete)
+- [x] 2.8 — Income stack layout (`app/(tabs)/(income)/_layout.tsx`)
 
 ---
 
