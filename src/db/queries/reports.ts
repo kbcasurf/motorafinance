@@ -1,4 +1,4 @@
-import { sql, between } from 'drizzle-orm';
+import { sql, between, eq } from 'drizzle-orm';
 import { db } from '../client';
 import { income, expenses, settings } from '../schema';
 
@@ -45,7 +45,7 @@ export async function getSettingValue(key: string): Promise<string | null> {
   const rows = await db
     .select()
     .from(settings)
-    .where(sql`${settings.key} = ${key}`)
+    .where(eq(settings.key, key))
     .limit(1);
   return rows[0]?.value ?? null;
 }
