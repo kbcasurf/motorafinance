@@ -10,5 +10,6 @@ export function useLiveExpenses(startDate: string, endDate: string) {
       .from(expenses)
       .where(between(expenses.date, startDate, endDate))
       .orderBy(desc(expenses.date)),
+    [startDate, endDate],
   );
 }
