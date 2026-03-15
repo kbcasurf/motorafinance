@@ -25,8 +25,8 @@ import { useThemeColors, spacing, fontSize } from '../../src/theme';
 export default function DashboardScreen() {
   const colors = useThemeColors();
   const period = usePeriodFilter();
-  const { data: incomes } = useLiveIncomes(period.startDate, period.endDate);
-  const { data: expensesList } = useLiveExpenses(period.startDate, period.endDate);
+  const { data: incomes, updatedAt: incomesUpdatedAt } = useLiveIncomes(period.startDate, period.endDate);
+  const { data: expensesList, updatedAt: expensesUpdatedAt } = useLiveExpenses(period.startDate, period.endDate);
 
   const [incomeByDay, setIncomeByDay] = useState<DailyAggregate[]>([]);
   const [expensesByDay, setExpensesByDay] = useState<DailyAggregate[]>([]);
@@ -34,13 +34,26 @@ export default function DashboardScreen() {
 
   // Load chart aggregates and goal when period changes
   useEffect(() => {
-    getDailyIncomeTotals(period.startDate, period.endDate).then(setIncomeByDay);
-    getDailyExpenseTotals(period.startDate, period.endDate).then(setExpensesByDay);
-  }, [period.startDate, period.endDate, incomes, expensesList]);
+    let cancelled = false;
+    Promise.all([
+      getDailyIncomeTotals(period.startDate, period.endDate),
+      getDailyExpenseTotals(period.startDate, period.endDate),
+    ]).then(([income, expenses]) => {
+      if (!cancelled) {
+        setIncomeByDay(income);
+        setExpensesByDay(expenses);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [period.startDate, period.endDate, incomesUpdatedAt, expensesUpdatedAt]);
 
   useEffect(() => {
     getSettingValue('monthly_goal').then((val) => {
-      setMonthlyGoal(val ? parseInt(val, 10) : null);
+      if (!val) return setMonthlyGoal(null);
+      const parsed = parseInt(val, 10);
+      setMonthlyGoal(Number.isFinite(parsed) ? parsed : null);
     });
   }, []);
 
