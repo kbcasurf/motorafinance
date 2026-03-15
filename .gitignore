@@ -56,3 +56,9 @@ CLAUDE.local.md
 # EAS / Expo
 .expo/
 dist/
+
+# Docs
+docs/
+docs/*
+CLAUDE.md
+prd.md

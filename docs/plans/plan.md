@@ -100,3 +100,35 @@
 - [x] 6.6 — CI/CD workflows (`.github/workflows/ci.yml`, `build.yml`)
 - [x] 6.7 — Unit tests for utils (22 tests across currency, calculations, export)
 - [x] 6.8 — Final review and cleanup
+
+---
+
+## What's Next
+
+All 6 phases of the v1.0 MVP are complete. Below are recommended next steps, roughly in priority order.
+
+### Immediate (before first release)
+
+1. **Manual QA pass on a real device** — Run `npx expo start` on a physical Android/iOS device. Test the full flow: add incomes, add expenses (including fuel), check dashboard, export CSV, configure settings, wipe data.
+2. **EAS build** — Run `npx eas build --platform android --profile preview` to generate an APK and test on a real device outside of Expo Go.
+3. **Push to GitHub** — Create a remote repo, push all code, and verify CI passes (`git remote add origin <url> && git push -u origin main`).
+
+### Short-term improvements
+
+4. **Date pickers** — Replace plain text date/time inputs in income and expense forms with native date/time pickers (`@react-native-community/datetimepicker` or `expo-date-time-picker`).
+5. **Tab bar icons** — Add proper icons to the tab bar using `@expo/vector-icons` (e.g., Ionicons: `bar-chart`, `cash`, `wallet`, `settings`).
+6. **Platform/category filters on list screens** — The PRD (RF-04.1, RF-04.2) specifies filters by platform and category on the history lists. Currently the lists show all entries for the month.
+7. **Period-aware list screens** — Sync income/expense list date ranges with the dashboard's period selector, or add independent period selectors to the lists.
+
+### Medium-term (v1.1 candidates)
+
+8. **Localized number input** — Use a currency mask input component for BRL formatting while typing (e.g., `react-native-mask-input`).
+9. **Onboarding flow** — First-launch experience to set driver name, vehicle, and monthly goal before reaching the dashboard.
+10. **Backup/restore** — Export/import the SQLite database file for manual backup (no cloud sync, per PRD scope).
+11. **Accessibility audit** — Verify all interactive elements have proper `accessibilityLabel` and `accessibilityRole` attributes.
+
+### Reference
+
+- PRD: `prd.md` (v2.0.0) — full requirements and acceptance criteria
+- Phase plans: `docs/plans/2026-03-15-phase{1-6}-*.md` — detailed implementation plans with code
+- CLAUDE.md: project conventions and commands
