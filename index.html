@@ -87,15 +87,6 @@
       letter-spacing: .04em;
       color: var(--text);
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-logo img {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
     }
 
     .nav-logo span { color: var(--teal); }
@@ -123,20 +114,35 @@
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
+      gap: 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 120px 40px 80px;
     }
 
-    .hero-icon {
-      width: 96px;
-      height: 96px;
-      border-radius: 24px;
-      margin-bottom: 28px;
-      box-shadow: 0 0 40px rgba(0,217,200,.25), 0 8px 32px rgba(0,0,0,.4);
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-logo {
+      width: 320px;
+      height: 320px;
+      border-radius: 56px;
+      box-shadow:
+        0 0 80px rgba(0,217,200,.3),
+        0 0 160px rgba(0,217,200,.1),
+        0 24px 64px rgba(0,0,0,.5);
       animation: fadeUp .5s ease both;
     }
 
@@ -171,11 +177,10 @@
 
     .hero-title {
       font-family: 'Exo 2', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-size: clamp(2.8rem, 5vw, 5rem);
       font-weight: 900;
       line-height: 1.05;
       letter-spacing: -.02em;
-      max-width: 760px;
       animation: fadeUp .7s .1s ease both;
     }
 
@@ -184,10 +189,9 @@
 
     .hero-sub {
       margin-top: 24px;
-      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-size: clamp(1rem, 2vw, 1.15rem);
       font-weight: 300;
       color: var(--muted);
-      max-width: 520px;
       animation: fadeUp .7s .2s ease both;
     }
 
@@ -667,6 +671,19 @@
     @media (max-width: 768px) {
       nav { padding: 16px 20px; }
 
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 100px 24px 60px;
+        gap: 40px;
+      }
+
+      .hero-text { align-items: center; }
+
+      .hero-visual { order: -1; }
+
+      .hero-logo { width: 200px; height: 200px; border-radius: 40px; }
+
       .stat-item { padding: 20px 24px; border-right: none; border-bottom: 1px solid var(--border); }
       .stat-item:last-child { border-bottom: none; }
       .stats { flex-direction: column; align-items: center; padding-bottom: 60px; }
@@ -693,10 +710,7 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#">
-      <img src="assets/icon.png" alt="Driver Finance logo" />
-      Driver<span>Finance</span>
-    </a>
+    <a class="nav-logo" href="#">Driver<span>Finance</span></a>
     <a class="nav-cta" href="https://github.com/kbcasurf/driver_finance/releases/latest/download/app-release.apk">
       Baixar APK
     </a>
@@ -704,46 +718,49 @@
 
   <!-- HERO -->
   <section class="hero">
-    <img class="hero-icon" src="assets/icon.png" alt="Driver Finance" />
+    <div class="hero-text">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Disponível para Android
+      </div>
 
-    <div class="badge">
-      <span class="badge-dot"></span>
-      Disponível para Android
+      <h1 class="hero-title">
+        Seu <span class="accent">financeiro</span><br/>
+        na palma da<br/>
+        <span class="accent-lime">mão</span>
+      </h1>
+
+      <p class="hero-sub">
+        Registre corridas, despesas e veja seu lucro líquido em tempo real.
+        Feito para motoristas de aplicativo que levam o negócio a sério.
+      </p>
+
+      <a
+        class="btn-download"
+        href="https://github.com/kbcasurf/driver_finance/releases/latest/download/app-release.apk"
+        download
+      >
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.523 15.341a.96.96 0 0 1-.958-.958.96.96 0 0 1 .958-.957.96.96 0 0 1 .957.957.96.96 0 0 1-.957.958m-11.05 0a.96.96 0 0 1-.957-.958.96.96 0 0 1 .957-.957.96.96 0 0 1 .958.957.96.96 0 0 1-.958.958m11.41-6.023l1.912-3.31a.4.4 0 0 0-.146-.546.4.4 0 0 0-.547.145l-1.935 3.35a11.9 11.9 0 0 0-4.667-.934c-1.68 0-3.27.34-4.666.934L5.9 5.607a.4.4 0 0 0-.547-.145.4.4 0 0 0-.146.546l1.913 3.31C4.012 10.675 2.21 13.165 2 16h20c-.21-2.835-2.012-5.325-4.118-6.682"/>
+        </svg>
+        <span class="btn-stack">
+          <span class="btn-small">Download gratuito</span>
+          <span class="btn-main">Baixar para Android</span>
+        </span>
+      </a>
+
+      <p class="hero-note">
+        APK direto do&nbsp;
+        <a href="https://github.com/kbcasurf/driver_finance/releases" target="_blank" rel="noopener">
+          GitHub Releases
+        </a>
+        &nbsp;· Requer Android 10+
+      </p>
     </div>
 
-    <h1 class="hero-title">
-      Seu <span class="accent">financeiro</span><br/>
-      na palma da<br/>
-      <span class="accent-lime">mão</span>
-    </h1>
-
-    <p class="hero-sub">
-      Registre corridas, despesas e veja seu lucro líquido em tempo real.
-      Feito para motoristas de aplicativo que levam o negócio a sério.
-    </p>
-
-    <a
-      class="btn-download"
-      href="https://github.com/kbcasurf/driver_finance/releases/latest/download/app-release.apk"
-      download
-    >
-      <!-- Android icon inline SVG -->
-      <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M17.523 15.341a.96.96 0 0 1-.958-.958.96.96 0 0 1 .958-.957.96.96 0 0 1 .957.957.96.96 0 0 1-.957.958m-11.05 0a.96.96 0 0 1-.957-.958.96.96 0 0 1 .957-.957.96.96 0 0 1 .958.957.96.96 0 0 1-.958.958m11.41-6.023l1.912-3.31a.4.4 0 0 0-.146-.546.4.4 0 0 0-.547.145l-1.935 3.35a11.9 11.9 0 0 0-4.667-.934c-1.68 0-3.27.34-4.666.934L5.9 5.607a.4.4 0 0 0-.547-.145.4.4 0 0 0-.146.546l1.913 3.31C4.012 10.675 2.21 13.165 2 16h20c-.21-2.835-2.012-5.325-4.118-6.682"/>
-      </svg>
-      <span class="btn-stack">
-        <span class="btn-small">Download gratuito</span>
-        <span class="btn-main">Baixar para Android</span>
-      </span>
-    </a>
-
-    <p class="hero-note">
-      APK direto do&nbsp;
-      <a href="https://github.com/kbcasurf/driver_finance/releases" target="_blank" rel="noopener">
-        GitHub Releases
-      </a>
-      &nbsp;· Requer Android 10+
-    </p>
+    <div class="hero-visual">
+      <img class="hero-logo" src="assets/icon.png" alt="Driver Finance" />
+    </div>
   </section>
 
   <!-- STATS -->
