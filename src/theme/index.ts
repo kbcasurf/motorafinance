@@ -1,4 +1,4 @@
-import { useColorScheme } from 'react-native';
+import { useSettingsStore } from '../stores/useSettingsStore';
 
 const palette = {
   green500: '#22C55E',
@@ -39,20 +39,20 @@ const lightColors = {
 };
 
 const darkColors = {
-  background: palette.gray900,
-  surface: palette.gray800,
-  surfaceSecondary: palette.gray700,
-  text: palette.gray50,
-  textSecondary: palette.gray400,
-  textInverse: palette.gray900,
-  border: palette.gray700,
-  primary: palette.blue500,
-  primaryText: palette.white,
-  positive: palette.green500,
-  negative: palette.red500,
-  icon: palette.gray400,
-  tabBar: palette.gray800,
-  tabBarBorder: palette.gray700,
+  background: '#07090F',
+  surface: '#0E1320',
+  surfaceSecondary: '#111827',
+  text: '#F0F4FF',
+  textSecondary: 'rgba(240,244,255,0.55)',
+  textInverse: '#07090F',
+  border: 'rgba(255,255,255,0.07)',
+  primary: '#00D9C8',
+  primaryText: '#07090F',
+  positive: '#A8FF3E',
+  negative: '#FF6B6B',
+  icon: 'rgba(240,244,255,0.55)',
+  tabBar: '#0E1320',
+  tabBarBorder: 'rgba(255,255,255,0.07)',
 };
 
 export const spacing = {
@@ -84,6 +84,6 @@ export const borderRadius = {
 export type ThemeColors = typeof lightColors;
 
 export function useThemeColors(): ThemeColors {
-  const scheme = useColorScheme();
-  return scheme === 'dark' ? darkColors : lightColors;
+  const darkTheme = useSettingsStore((s) => s.darkTheme);
+  return darkTheme ? darkColors : lightColors;
 }

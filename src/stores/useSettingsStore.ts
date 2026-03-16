@@ -5,6 +5,7 @@ interface SettingsState {
   driverName: string;
   vehicleModel: string;
   monthlyGoal: string;
+  darkTheme: boolean;
   hydrated: boolean;
   hydrate: () => Promise<void>;
   updateSetting: (key: string, value: string) => Promise<void>;
@@ -14,6 +15,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   driverName: '',
   vehicleModel: '',
   monthlyGoal: '',
+  darkTheme: false,
   hydrated: false,
 
   hydrate: async () => {
@@ -22,6 +24,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
       driverName: all['driver_name'] ?? '',
       vehicleModel: all['vehicle_model'] ?? '',
       monthlyGoal: all['monthly_goal'] ?? '',
+      darkTheme: all['dark_theme'] === 'true',
       hydrated: true,
     });
   },
@@ -38,6 +41,9 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         break;
       case 'monthly_goal':
         set({ monthlyGoal: value });
+        break;
+      case 'dark_theme':
+        set({ darkTheme: value === 'true' });
         break;
     }
   },

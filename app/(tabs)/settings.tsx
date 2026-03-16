@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Alert, StyleSheet, Switch } from 'react-native';
 import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { Input } from '../../src/components/ui/Input';
 import { Button } from '../../src/components/ui/Button';
@@ -18,6 +18,7 @@ import * as Haptics from 'expo-haptics';
 export default function SettingsScreen() {
   const colors = useThemeColors();
   const {
+    darkTheme,
     driverName,
     vehicleModel,
     monthlyGoal,
@@ -127,7 +128,20 @@ export default function SettingsScreen() {
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.content}
     >
-      <Text style={[styles.sectionTitle, { color: colors.text }]}>Perfil</Text>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Aparência</Text>
+      <Card>
+        <View style={styles.themeRow}>
+          <Text style={[styles.themeLabel, { color: colors.text }]}>Tema escuro</Text>
+          <Switch
+            value={darkTheme}
+            onValueChange={(v) => updateSetting('dark_theme', String(v))}
+            trackColor={{ false: colors.border, true: colors.primary }}
+            thumbColor={colors.surface}
+          />
+        </View>
+      </Card>
+
+      <Text style={[styles.sectionTitle, { color: colors.text, marginTop: spacing.lg }]}>Perfil</Text>
       <Card>
         <Input
           label="Nome do motorista"
@@ -197,4 +211,6 @@ const styles = StyleSheet.create({
   description: { fontSize: fontSize.sm, marginBottom: spacing.md },
   dangerZone: { marginTop: spacing.xl },
   bottomSpacer: { height: spacing.xxl },
+  themeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  themeLabel: { fontSize: fontSize.md },
 });

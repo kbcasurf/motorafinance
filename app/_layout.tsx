@@ -8,6 +8,7 @@ import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
 import migrations from '../drizzle/migrations/migrations';
 import { useSettingsStore } from '../src/stores/useSettingsStore';
 import { useThemeColors } from '../src/theme';
+import { useFonts, Exo2_700Bold } from '@expo-google-fonts/exo-2';
 
 const expo = openDatabaseSync('driverfinance.db', {
   enableChangeListener: true,
@@ -19,6 +20,7 @@ export default function RootLayout() {
   const { success, error } = useMigrations(db, migrations);
   const hydrateSettings = useSettingsStore((s) => s.hydrate);
   const colors = useThemeColors();
+  const [fontsLoaded] = useFonts({ Exo2_700Bold });
 
   useEffect(() => {
     if (success) {
@@ -35,7 +37,7 @@ export default function RootLayout() {
     );
   }
 
-  if (!success) {
+  if (!success || !fontsLoaded) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.primary} />
