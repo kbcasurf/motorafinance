@@ -5,6 +5,7 @@ node_modules/
 
 # Expo
 .expo/
+.expo-shared/
 dist/
 web-build/
 expo-env.d.ts
@@ -16,49 +17,40 @@ expo-env.d.ts
 *.p8
 *.p12
 *.key
+*.pem
 *.mobileprovision
+
+# Generated native folders (managed workflow)
+/ios
+/android
 
 # Metro
 .metro-health-check*
 
-# debug
+# Debug logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
 # macOS
 .DS_Store
-*.pem
 
-# local env files
-.env*.local
+# Local env files
+.env
+.env.*
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 
-# generated native folders
-/ios
-/android
+# Test coverage
+coverage/
 
 # Claude Code
 .claude/settings.local.json
 CLAUDE.local.md
 
-# Secrets
-.env
-.env.*
-*.p8
-*.p12
-*.pem
-*.key
-*.mobileprovision
-
-# EAS / Expo
-.expo/
-dist/
-
-# Docs
+# Docs (local only)
 docs/
-docs/*
 CLAUDE.md
 prd.md

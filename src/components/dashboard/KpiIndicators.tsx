@@ -40,11 +40,12 @@ export function KpiIndicators({ revenuePerKm, costPerKm, totalKm }: KpiIndicator
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
   },
-  card: { flex: 1, alignItems: 'center' },
+  card: { width: '48%', alignItems: 'center' },
   label: { fontSize: fontSize.xs, marginBottom: spacing.xs },
   value: { fontSize: fontSize.md, fontWeight: '600' },
 });

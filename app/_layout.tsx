@@ -5,7 +5,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { drizzle } from 'drizzle-orm/expo-sqlite';
 import { openDatabaseSync } from 'expo-sqlite';
 import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
-import migrations from '../drizzle/migrations';
+import migrations from '../drizzle/migrations/migrations';
 import { useSettingsStore } from '../src/stores/useSettingsStore';
 import { useThemeColors } from '../src/theme';
 

@@ -1,4 +1,5 @@
 import { eq } from 'drizzle-orm';
+import * as Crypto from 'expo-crypto';
 import { db } from '../client';
 import { customCategories } from '../schema';
 
@@ -6,7 +7,7 @@ export type CustomCategory = typeof customCategories.$inferSelect;
 
 export async function insertCustomCategory(name: string): Promise<void> {
   await db.insert(customCategories).values({
-    id: crypto.randomUUID(),
+    id: Crypto.randomUUID(),
     name,
   });
 }

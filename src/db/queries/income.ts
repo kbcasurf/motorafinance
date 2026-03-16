@@ -1,4 +1,5 @@
 import { eq, desc, between } from 'drizzle-orm';
+import * as Crypto from 'expo-crypto';
 import { db } from '../client';
 import { income } from '../schema';
 
@@ -8,7 +9,7 @@ export type NewIncome = Omit<typeof income.$inferInsert, 'id' | 'createdAt' | 'u
 export async function insertIncome(data: NewIncome): Promise<void> {
   const now = new Date().toISOString();
   await db.insert(income).values({
-    id: crypto.randomUUID(),
+    id: Crypto.randomUUID(),
     ...data,
     createdAt: now,
     updatedAt: now,

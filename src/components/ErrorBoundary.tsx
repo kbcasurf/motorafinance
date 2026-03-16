@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 interface Props {
   children: React.ReactNode;
+  silent?: boolean;
 }
 
 interface State {
@@ -26,6 +27,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
+      if (this.props.silent) return null;
       return (
         <View style={styles.container}>
           <Text style={styles.emoji}>:(</Text>

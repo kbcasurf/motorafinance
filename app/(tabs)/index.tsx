@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { useSettingsStore } from '../../src/stores/useSettingsStore';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useLiveIncomes } from '../../src/hooks/useLiveIncomes';
@@ -12,8 +12,11 @@ import {
 } from '../../src/utils/calculations';
 import { PeriodSelector } from '../../src/components/dashboard/PeriodSelector';
 import { SummaryCards } from '../../src/components/dashboard/SummaryCards';
-import { KpiIndicators } from '../../src/components/dashboard/KpiIndicators';
-import { ProfitChart } from '../../src/components/charts/ProfitChart';
+import { ErrorBoundary } from '../../src/components/ErrorBoundary';
+
+const ProfitChart = lazy(() =>
+  import('../../src/components/charts/ProfitChart').then((m) => ({ default: m.ProfitChart }))
+);
 import { GoalProgress } from '../../src/components/dashboard/GoalProgress';
 import {
   getDailyIncomeTotals,
@@ -85,16 +88,17 @@ export default function DashboardScreen() {
             totalRevenue={totalRevenue}
             totalExpenses={totalExpenses}
             netProfit={netProfit}
-          />
-
-          <KpiIndicators
             revenuePerKm={revenuePerKm}
             costPerKm={costPerKm}
             totalKm={totalKm}
           />
 
           {showChart && (
-            <ProfitChart incomeByDay={incomeByDay} expensesByDay={expensesByDay} />
+            <ErrorBoundary silent>
+              <Suspense fallback={null}>
+                <ProfitChart incomeByDay={incomeByDay} expensesByDay={expensesByDay} />
+              </Suspense>
+            </ErrorBoundary>
           )}
 
           {period.periodType === 'month' && (

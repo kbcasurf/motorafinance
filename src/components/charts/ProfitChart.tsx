@@ -29,11 +29,14 @@ export function ProfitChart({ incomeByDay, expensesByDay }: ProfitChartProps) {
 
   const data: ChartDatum[] = Array.from(dateSet)
     .sort()
-    .map((date) => ({
-      day: date.slice(5), // MM-DD for x-axis labels
+    .map((date) => {
+      const [, month, day] = date.split('-');
+      return {
+      day: `${day}/${month}`, // DD/MM for x-axis labels
       revenue: (incomeMap.get(date) ?? 0) / 100,
       expenses: (expenseMap.get(date) ?? 0) / 100,
-    }));
+      };
+    });
 
   if (data.length === 0) {
     return null;
