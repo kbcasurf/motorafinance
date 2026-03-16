@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Driver Finance — Controle Financeiro para Motoristas</title>
   <meta name="description" content="Registre receitas, despesas e veja seu lucro líquido. O app financeiro feito para motoristas de aplicativo." />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -86,6 +87,15 @@
       letter-spacing: .04em;
       color: var(--text);
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
     }
 
     .nav-logo span { color: var(--teal); }
@@ -119,6 +129,15 @@
       justify-content: center;
       text-align: center;
       padding: 120px 24px 80px;
+    }
+
+    .hero-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 24px;
+      margin-bottom: 28px;
+      box-shadow: 0 0 40px rgba(0,217,200,.25), 0 8px 32px rgba(0,0,0,.4);
+      animation: fadeUp .5s ease both;
     }
 
     .badge {
@@ -674,7 +693,10 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#">Driver<span>Finance</span></a>
+    <a class="nav-logo" href="#">
+      <img src="assets/icon.png" alt="Driver Finance logo" />
+      Driver<span>Finance</span>
+    </a>
     <a class="nav-cta" href="https://github.com/kbcasurf/driver_finance/releases/latest/download/app-release.apk">
       Baixar APK
     </a>
@@ -682,6 +704,8 @@
 
   <!-- HERO -->
   <section class="hero">
+    <img class="hero-icon" src="assets/icon.png" alt="Driver Finance" />
+
     <div class="badge">
       <span class="badge-dot"></span>
       Disponível para Android
