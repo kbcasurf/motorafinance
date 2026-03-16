@@ -1,4 +1,4 @@
-# DriverFinance — Contexto para Claude Code
+# MotoraFinance — Contexto para Claude Code
 
 ## O que é este projeto
 Aplicativo React Native (Expo) para controle financeiro de motoristas de

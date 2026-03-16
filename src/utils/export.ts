@@ -74,7 +74,7 @@ export async function exportAndShareCsv(
   periodLabel: string,
 ): Promise<void> {
   const content = buildCsvContent(incomes, expenses);
-  const fileName = `driverfinance-${periodLabel.replace(/\s+/g, '-')}.csv`;
+  const fileName = `motorafinance-${periodLabel.replace(/\s+/g, '-')}.csv`;
   const filePath = `${FileSystem.cacheDirectory}${fileName}`;
 
   await FileSystem.writeAsStringAsync(filePath, content, {

@@ -10,7 +10,7 @@ import { useSettingsStore } from '../src/stores/useSettingsStore';
 import { useThemeColors } from '../src/theme';
 import { useFonts, Exo2_700Bold } from '@expo-google-fonts/exo-2';
 
-const expo = openDatabaseSync('driverfinance.db', {
+const expo = openDatabaseSync('motorafinance.db', {
   enableChangeListener: true,
 });
 

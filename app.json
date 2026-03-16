@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "driverfinance",
-    "slug": "driverfinance",
-    "scheme": "driverfinance",
+    "name": "MotoraFinance",
+    "slug": "motorafinance",
+    "scheme": "motorafinance",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kbcasurf.driverfinance",
+      "bundleIdentifier": "com.kbcasurf.motorafinance",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -27,7 +27,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.kbcasurf.driverfinance"
+      "package": "com.kbcasurf.motorafinance"
     },
     "web": {
       "favicon": "./assets/favicon.png"

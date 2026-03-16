@@ -1,4 +1,4 @@
-# DriverFinance
+# MotoraFinance
 
 Aplicativo Android para controle financeiro de motoristas de aplicativos de mobilidade urbana. Registre receitas, despesas e acompanhe seu lucro líquido — tudo offline, sem cadastro e sem nuvem.
 
