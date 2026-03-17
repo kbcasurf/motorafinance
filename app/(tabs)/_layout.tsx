@@ -16,10 +16,10 @@ export default function TabLayout() {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
             <Image
               source={require('../../assets/icon.png')}
-              style={{ width: 32, height: 32, borderRadius: 16 }}
+              style={{ width: 44, height: 44, borderRadius: 50 }}
             />
             <Text style={{ fontFamily: 'Exo2_700Bold', fontSize: 18, letterSpacing: 0.7, color: colors.text }}>
-              {'Driver'}<Text style={{ color: colors.primary }}>{'Finance'}</Text>
+              {'Motora'}<Text style={{ color: colors.primary }}>{'Finance'}</Text>
             </Text>
           </View>
         ),
