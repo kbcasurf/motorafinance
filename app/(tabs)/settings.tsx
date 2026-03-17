@@ -178,10 +178,10 @@ export default function SettingsScreen() {
       </Text>
       <Card>
         <Text style={[styles.description, { color: colors.textSecondary }]}>
-          Exporta receitas e despesas do mes atual em formato CSV.
+          Exporta receitas e despesas do mês atual em formato CSV.
         </Text>
         <Button
-          title={exporting ? 'Exportando...' : 'Exportar CSV do mes'}
+          title={exporting ? 'Exportando...' : 'Exportar CSV do mês'}
           onPress={handleExport}
           disabled={exporting}
         />

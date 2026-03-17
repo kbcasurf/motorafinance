@@ -19,8 +19,7 @@ export const DEFAULT_EXPENSE_CATEGORIES: ExpenseCategory[] = [
 export const PLATFORMS = [
   { id: 'uber', label: 'Uber' },
   { id: '99', label: '99' },
-  { id: 'indrive', label: 'InDrive' },
-  { id: 'cabify', label: 'Cabify' },
+  { id: 'chama27', label: 'Chama27' },
   { id: 'other', label: 'Outro' },
 ] as const;
 

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { Image, Text, View } from 'react-native';
 import { useThemeColors } from '../../src/theme';
 
@@ -37,7 +37,7 @@ export default function TabLayout() {
           title: 'Dashboard',
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="bar-chart-outline" size={size} color={color} />
+            <Feather name="bar-chart-2" size={size} color={color} />
           ),
         }}
       />
@@ -47,7 +47,7 @@ export default function TabLayout() {
           title: 'Receitas',
           tabBarLabel: 'Receitas',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cash-outline" size={size} color={color} />
+            <Feather name="trending-up" size={size} color={color} />
           ),
         }}
       />
@@ -57,7 +57,7 @@ export default function TabLayout() {
           title: 'Despesas',
           tabBarLabel: 'Despesas',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="wallet-outline" size={size} color={color} />
+            <Feather name="credit-card" size={size} color={color} />
           ),
         }}
       />
@@ -67,7 +67,7 @@ export default function TabLayout() {
           title: 'Ajustes',
           tabBarLabel: 'Ajustes',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings-outline" size={size} color={color} />
+            <Feather name="settings" size={size} color={color} />
           ),
         }}
       />

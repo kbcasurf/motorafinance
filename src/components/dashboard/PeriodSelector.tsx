@@ -13,7 +13,7 @@ interface PeriodSelectorProps {
 const PERIOD_OPTIONS: { type: PeriodType; label: string }[] = [
   { type: 'day', label: 'Dia' },
   { type: 'week', label: 'Semana' },
-  { type: 'month', label: 'Mes' },
+  { type: 'month', label: 'Mês' },
 ];
 
 export function PeriodSelector({

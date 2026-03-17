@@ -57,7 +57,7 @@ export function DatePickerField({ label, value, onChange, error }: DatePickerFie
             ]}
           >
             <Text style={{ color: value ? colors.text : colors.textSecondary, fontSize: fontSize.md }}>
-              {value || 'Selecionar data'}
+              {value ? format(dateValue, 'dd/MM/yyyy') : 'Selecionar data'}
             </Text>
           </Pressable>
 

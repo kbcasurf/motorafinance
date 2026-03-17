@@ -31,7 +31,7 @@ export default function IncomeListScreen() {
     <GestureHandlerRootView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
         <Text style={[styles.headerLabel, { color: colors.textSecondary }]}>
-          Total do mes
+          Total do mês
         </Text>
         <Text style={[styles.headerTotal, { color: colors.positive }]}>
           {formatCurrency(total)}
@@ -45,10 +45,13 @@ export default function IncomeListScreen() {
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Nenhuma receita registrada neste mes.
+              Nenhuma receita registrada neste mês.
             </Text>
             <Text style={[styles.emptyHint, { color: colors.textSecondary }]}>
-              Toque em + para adicionar sua primeira corrida.
+              Toque em + para adicionar seu faturamento do dia. Você pode registrar ganhos de diferentes plataformas e acompanhar seu progresso ao longo do mês.
+            </Text>
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              Recomenda-se marcar o odômetro inicial do dia, o odômetro final e lançar uma única entrada com todos os ganhos diários.
             </Text>
           </View>
         }

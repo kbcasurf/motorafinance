@@ -31,7 +31,7 @@ export default function ExpenseListScreen() {
       <View
         style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}
       >
-        <Text style={[styles.headerLabel, { color: colors.textSecondary }]}>Total do mes</Text>
+        <Text style={[styles.headerLabel, { color: colors.textSecondary }]}>Total do mês</Text>
         <Text style={[styles.headerTotal, { color: colors.negative }]}>
           {formatCurrency(total)}
         </Text>
@@ -44,7 +44,7 @@ export default function ExpenseListScreen() {
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Nenhuma despesa registrada neste mes.
+              Nenhuma despesa registrada neste mês.
             </Text>
             <Text style={[styles.emptyHint, { color: colors.textSecondary }]}>
               Toque em + para registrar uma despesa.
