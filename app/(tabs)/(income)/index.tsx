@@ -51,7 +51,7 @@ export default function IncomeListScreen() {
               Toque em + para adicionar seu faturamento do dia. Você pode registrar ganhos de diferentes plataformas e acompanhar seu progresso ao longo do mês.
             </Text>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Recomenda-se marcar o odômetro inicial do dia, o odômetro final e lançar uma única entrada com todos os ganhos diários.
+              {'\n'}Recomenda-se marcar o odômetro inicial do dia, o odômetro final e lançar uma única entrada com todos os ganhos diários.
             </Text>
           </View>
         }
