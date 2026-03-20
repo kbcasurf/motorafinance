@@ -7,6 +7,11 @@ interface SettingsState {
   monthlyGoal: string;
   darkTheme: boolean;
   hydrated: boolean;
+  tankCapacityMl: string;
+  consumptionEthanolUrban: string;
+  consumptionEthanolHighway: string;
+  consumptionGasolineUrban: string;
+  consumptionGasolineHighway: string;
   hydrate: () => Promise<void>;
   updateSetting: (key: string, value: string) => Promise<void>;
 }
@@ -17,6 +22,11 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   monthlyGoal: '',
   darkTheme: false,
   hydrated: false,
+  tankCapacityMl: '',
+  consumptionEthanolUrban: '',
+  consumptionEthanolHighway: '',
+  consumptionGasolineUrban: '',
+  consumptionGasolineHighway: '',
 
   hydrate: async () => {
     const all = await getAllSettings();
@@ -26,6 +36,11 @@ export const useSettingsStore = create<SettingsState>((set) => ({
       monthlyGoal: all['monthly_goal'] ?? '',
       darkTheme: all['dark_theme'] === 'true',
       hydrated: true,
+      tankCapacityMl: all['tank_capacity_ml'] ?? '',
+      consumptionEthanolUrban: all['consumption_ethanol_urban'] ?? '',
+      consumptionEthanolHighway: all['consumption_ethanol_highway'] ?? '',
+      consumptionGasolineUrban: all['consumption_gasoline_urban'] ?? '',
+      consumptionGasolineHighway: all['consumption_gasoline_highway'] ?? '',
     });
   },
 
@@ -44,6 +59,21 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         break;
       case 'dark_theme':
         set({ darkTheme: value === 'true' });
+        break;
+      case 'tank_capacity_ml':
+        set({ tankCapacityMl: value });
+        break;
+      case 'consumption_ethanol_urban':
+        set({ consumptionEthanolUrban: value });
+        break;
+      case 'consumption_ethanol_highway':
+        set({ consumptionEthanolHighway: value });
+        break;
+      case 'consumption_gasoline_urban':
+        set({ consumptionGasolineUrban: value });
+        break;
+      case 'consumption_gasoline_highway':
+        set({ consumptionGasolineHighway: value });
         break;
     }
   },

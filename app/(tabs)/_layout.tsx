@@ -62,6 +62,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="(extras)"
+        options={{
+          title: 'Extras',
+          tabBarLabel: 'Extras',
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="navigation" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Ajustes',

@@ -1,6 +1,6 @@
 import { sql, between, eq } from 'drizzle-orm';
 import { db } from '../client';
-import { income, expenses, settings } from '../schema';
+import { income, expenses, settings, extras } from '../schema';
 
 export interface DailyAggregate {
   date: string;
@@ -48,4 +48,17 @@ export async function getSettingValue(key: string): Promise<string | null> {
     .where(eq(settings.key, key))
     .limit(1);
   return rows[0]?.value ?? null;
+}
+
+export async function getExtraKmForPeriod(
+  startDate: string,
+  endDate: string,
+): Promise<number> {
+  const rows = await db
+    .select({
+      total: sql<number>`sum(${extras.odoEnd} - ${extras.odoStart})`.as('total'),
+    })
+    .from(extras)
+    .where(between(extras.date, startDate, endDate));
+  return rows[0]?.total ?? 0;
 }

@@ -35,6 +35,11 @@ export async function getIncomeById(id: string): Promise<Income | undefined> {
   return rows[0];
 }
 
+export async function getIncomeByDate(date: string): Promise<Income | undefined> {
+  const rows = await db.select().from(income).where(eq(income.date, date)).limit(1);
+  return rows[0];
+}
+
 export async function getLastIncome(): Promise<Income | undefined> {
   const rows = await db
     .select()

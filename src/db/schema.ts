@@ -8,7 +8,10 @@ export const income = sqliteTable('income', {
   odoStart: integer('odo_start'),
   odoEnd: integer('odo_end'),
   date: text('date').notNull(),
-  time: text('time'),
+  time: text('time'), // deprecated: usar timeStart e timeEnd
+  timeStart: text('time_start').notNull().default('00:00'),
+  timeEnd: text('time_end').notNull().default('23:59'),
+  routeType: text('route_type').notNull().default('urban'),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
 });
@@ -35,4 +38,16 @@ export const customCategories = sqliteTable('custom_categories', {
 export const settings = sqliteTable('settings', {
   key: text('key').primaryKey(),
   value: text('value').notNull(),
+});
+
+export const extras = sqliteTable('extras', {
+  id: text('id').primaryKey(),
+  odoStart: integer('odo_start').notNull(),
+  odoEnd: integer('odo_end').notNull(),
+  date: text('date').notNull(),
+  timeStart: text('time_start').notNull(),
+  timeEnd: text('time_end').notNull(),
+  routeType: text('route_type').notNull(),
+  createdAt: text('created_at').notNull(),
+  updatedAt: text('updated_at').notNull(),
 });
