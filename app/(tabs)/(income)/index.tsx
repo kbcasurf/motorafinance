@@ -42,6 +42,14 @@ export default function IncomeListScreen() {
         data={incomes}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border }]}>
+            <Text style={[styles.infoTitle, { color: colors.text }]}>O que registrar aqui?</Text>
+            <Text style={[styles.infoBody, { color: colors.textSecondary }]}>
+              Registre seus ganhos diários com plataformas como Chama27, Uber e 99. Um registro por dia, consolidando todos os ganhos do dia — valor recebido, quilometragem rodada e horários de trabalho.
+            </Text>
+          </View>
+        }
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
@@ -116,6 +124,9 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', marginTop: spacing.xxl, padding: spacing.lg },
   emptyText: { fontSize: fontSize.md, textAlign: 'center' },
   emptyHint: { fontSize: fontSize.sm, textAlign: 'center', marginTop: spacing.sm },
+  infoBox: { borderWidth: 1, borderRadius: borderRadius.lg, padding: spacing.md, marginBottom: spacing.md },
+  infoTitle: { fontSize: fontSize.sm, fontWeight: '600', marginBottom: spacing.xs },
+  infoBody: { fontSize: fontSize.sm, lineHeight: 20 },
   fab: {
     position: 'absolute',
     bottom: spacing.lg,

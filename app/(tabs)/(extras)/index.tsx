@@ -41,7 +41,7 @@ export default function ExtrasListScreen() {
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Nenhum deslocamento registrado neste mês
+              Nenhum deslocamento recreativo registrado neste mês
             </Text>
           </View>
         }

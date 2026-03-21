@@ -3,12 +3,14 @@ import { useSettingsStore } from '../../src/stores/useSettingsStore';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { useLiveIncomes } from '../../src/hooks/useLiveIncomes';
 import { useLiveExpenses } from '../../src/hooks/useLiveExpenses';
+import { useLiveExtras } from '../../src/hooks/useLiveExtras';
 import { usePeriodFilter } from '../../src/hooks/usePeriodFilter';
 import {
   computeNetProfit,
   computeTotalKm,
   computeCostPerKm,
   computeRevenuePerKm,
+  computeFuelConsumption,
 } from '../../src/utils/calculations';
 import { PeriodSelector } from '../../src/components/dashboard/PeriodSelector';
 import { SummaryCards } from '../../src/components/dashboard/SummaryCards';
@@ -16,6 +18,9 @@ import { ErrorBoundary } from '../../src/components/ErrorBoundary';
 
 const ProfitChart = lazy(() =>
   import('../../src/components/charts/ProfitChart').then((m) => ({ default: m.ProfitChart }))
+);
+const ConsumptionChart = lazy(() =>
+  import('../../src/components/charts/ConsumptionChart').then((m) => ({ default: m.ConsumptionChart }))
 );
 import { GoalProgress } from '../../src/components/dashboard/GoalProgress';
 import {
@@ -30,6 +35,7 @@ export default function DashboardScreen() {
   const period = usePeriodFilter();
   const { data: incomes, updatedAt: incomesUpdatedAt } = useLiveIncomes(period.startDate, period.endDate);
   const { data: expensesList, updatedAt: expensesUpdatedAt } = useLiveExpenses(period.startDate, period.endDate);
+  const { data: extrasList } = useLiveExtras(period.startDate, period.endDate);
 
   const [incomeByDay, setIncomeByDay] = useState<DailyAggregate[]>([]);
   const [expensesByDay, setExpensesByDay] = useState<DailyAggregate[]>([]);
@@ -59,6 +65,8 @@ export default function DashboardScreen() {
   const totalKm = computeTotalKm(incomes);
   const revenuePerKm = computeRevenuePerKm(totalRevenue, totalKm);
   const costPerKm = computeCostPerKm(totalExpenses, totalKm);
+
+  const fuelConsumption = computeFuelConsumption(incomes, extrasList, expensesList);
 
   const hasData = incomes.length > 0 || expensesList.length > 0;
   const showChart = period.periodType !== 'day' && hasData;
@@ -97,6 +105,17 @@ export default function DashboardScreen() {
             <ErrorBoundary silent>
               <Suspense fallback={null}>
                 <ProfitChart incomeByDay={incomeByDay} expensesByDay={expensesByDay} />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+
+          {(fuelConsumption.urbanKmL !== null || fuelConsumption.highwayKmL !== null) && (
+            <ErrorBoundary silent>
+              <Suspense fallback={null}>
+                <ConsumptionChart
+                  urbanKmL={fuelConsumption.urbanKmL}
+                  highwayKmL={fuelConsumption.highwayKmL}
+                />
               </Suspense>
             </ErrorBoundary>
           )}

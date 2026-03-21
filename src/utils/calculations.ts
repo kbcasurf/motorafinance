@@ -94,6 +94,44 @@ export function computeNetProfitWithAttribution(
   return totalRevenueCents - attributableFuel - nonFuelExpensesCents;
 }
 
+export interface FuelConsumptionResult {
+  urbanKmL: number | null;
+  highwayKmL: number | null;
+}
+
+export function computeFuelConsumption(
+  incomes: Array<{ odoStart: number | null; odoEnd: number | null; routeType: string }>,
+  extrasArr: Array<{ odoStart: number; odoEnd: number; routeType: string }>,
+  expensesArr: Array<{ fuelLiters: number | null }>,
+): FuelConsumptionResult {
+  const incomeKm = computeProfessionalKmByRouteType(incomes);
+
+  const extrasKm = extrasArr.reduce(
+    (acc, row) => {
+      const km = Math.max(0, row.odoEnd - row.odoStart);
+      if (row.routeType === 'highway') return { ...acc, highway: acc.highway + km };
+      return { ...acc, urban: acc.urban + km };
+    },
+    { urban: 0, highway: 0 },
+  );
+
+  const urbanKm = incomeKm.urban + extrasKm.urban;
+  const highwayKm = incomeKm.highway + extrasKm.highway;
+  const totalKm = urbanKm + highwayKm;
+
+  const totalLiters = expensesArr.reduce((sum, e) => sum + (e.fuelLiters ?? 0), 0) / 1000;
+
+  if (totalLiters === 0 || totalKm === 0) return { urbanKmL: null, highwayKmL: null };
+
+  const urbanFuel = totalLiters * (urbanKm / totalKm);
+  const highwayFuel = totalLiters * (highwayKm / totalKm);
+
+  return {
+    urbanKmL: urbanKm > 0 && urbanFuel > 0 ? urbanKm / urbanFuel : null,
+    highwayKmL: highwayKm > 0 && highwayFuel > 0 ? highwayKm / highwayFuel : null,
+  };
+}
+
 // Fuel cost attributable to professional work.
 // Fallback: if total_km = 0, returns fuelExpensesCents in full.
 export function computeAttributableFuelCost(params: AttributionParams): number {

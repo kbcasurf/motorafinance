@@ -41,6 +41,14 @@ export default function ExpenseListScreen() {
         data={expenses}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border }]}>
+            <Text style={[styles.infoTitle, { color: colors.text }]}>O que registrar aqui?</Text>
+            <Text style={[styles.infoBody, { color: colors.textSecondary }]}>
+              Registre os custos relacionados ao seu trabalho — combustível, manutenção, lavagem, seguro e outros. Essas despesas são usadas para calcular seu lucro líquido mensal.
+            </Text>
+          </View>
+        }
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
@@ -104,6 +112,9 @@ const styles = StyleSheet.create({
   empty: { alignItems: 'center', marginTop: spacing.xxl, padding: spacing.lg },
   emptyText: { fontSize: fontSize.md, textAlign: 'center' },
   emptyHint: { fontSize: fontSize.sm, textAlign: 'center', marginTop: spacing.sm },
+  infoBox: { borderWidth: 1, borderRadius: borderRadius.lg, padding: spacing.md, marginBottom: spacing.md },
+  infoTitle: { fontSize: fontSize.sm, fontWeight: '600', marginBottom: spacing.xs },
+  infoBody: { fontSize: fontSize.sm, lineHeight: 20 },
   fab: {
     position: 'absolute',
     bottom: spacing.lg,
