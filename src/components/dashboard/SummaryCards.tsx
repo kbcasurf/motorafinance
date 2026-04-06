@@ -1,8 +1,8 @@
-// src/components/dashboard/SummaryCards.tsx
+import { memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Card } from '../ui/Card';
 import { formatCurrency } from '../../utils/currency';
-import { useThemeColors, spacing, fontSize } from '../../theme';
+import { useThemeColors, spacing, typography } from '../../theme';
 
 interface SummaryCardsProps {
   totalRevenue: number;
@@ -13,7 +13,7 @@ interface SummaryCardsProps {
   totalKm: number;
 }
 
-export function SummaryCards({
+export const SummaryCards = memo(function SummaryCards({
   totalRevenue,
   totalExpenses,
   netProfit,
@@ -26,62 +26,105 @@ export function SummaryCards({
   return (
     <View style={styles.container}>
       {/* Line 1 */}
-      <Card style={styles.card}>
-        <Text style={[styles.cardLabel, { color: colors.textSecondary }]}>Receita bruta</Text>
-        <Text style={[styles.cardValue, { color: colors.positive }]}>
-          {formatCurrency(totalRevenue)}
-        </Text>
-      </Card>
-      <Card style={styles.card}>
-        <Text style={[styles.cardLabel, { color: colors.textSecondary }]}>R$/km</Text>
-        <Text style={[styles.cardValue, { color: colors.positive }]}>
-          {formatCurrency(revenuePerKm)}
-        </Text>
-      </Card>
+      <View style={styles.cardPair}>
+        <Card style={styles.card}>
+          <Text
+            style={[styles.caption, { color: colors.textSecondary }]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            Receita bruta
+          </Text>
+          <Text
+            style={[styles.value, { color: colors.positive }]}
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {formatCurrency(totalRevenue)}
+          </Text>
+        </Card>
+        <Card style={styles.card}>
+          <Text
+            style={[styles.caption, { color: colors.textSecondary }]}
+            numberOfLines={1}>
+            R$/km
+          </Text>
+          <Text
+            style={[styles.value, { color: colors.positive }]}
+            numberOfLines={1}>
+            {formatCurrency(revenuePerKm)}
+          </Text>
+        </Card>
+      </View>
 
       {/* Line 2 */}
-      <Card style={styles.card}>
-        <Text style={[styles.cardLabel, { color: colors.textSecondary }]}>Despesas</Text>
-        <Text style={[styles.cardValue, { color: colors.negative }]}>
-          {formatCurrency(totalExpenses)}
-        </Text>
-      </Card>
-      <Card style={styles.card}>
-        <Text style={[styles.cardLabel, { color: colors.textSecondary }]}>Custo/km</Text>
-        <Text style={[styles.cardValue, { color: colors.negative }]}>
-          {formatCurrency(costPerKm)}
-        </Text>
-      </Card>
+      <View style={styles.cardPair}>
+        <Card style={styles.card}>
+          <Text
+            style={[styles.caption, { color: colors.textSecondary }]}
+            numberOfLines={1}>
+            Despesas
+          </Text>
+          <Text
+            style={[styles.value, { color: colors.negative }]}
+            numberOfLines={1}>
+            {formatCurrency(totalExpenses)}
+          </Text>
+        </Card>
+        <Card style={styles.card}>
+          <Text
+            style={[styles.caption, { color: colors.textSecondary }]}
+            numberOfLines={1}>
+            Custo/km
+          </Text>
+          <Text
+            style={[styles.value, { color: colors.negative }]}
+            numberOfLines={1}>
+            {formatCurrency(costPerKm)}
+          </Text>
+        </Card>
+      </View>
 
       {/* Line 3 */}
-      <Card style={styles.card}>
-        <Text style={[styles.cardLabel, { color: colors.textSecondary }]}>Lucro líquido</Text>
-        <Text
-          style={[
-            styles.cardValue,
-            { color: netProfit >= 0 ? colors.positive : colors.negative },
-          ]}
-        >
-          {formatCurrency(netProfit)}
-        </Text>
-      </Card>
-      <Card style={styles.card}>
-        <Text style={[styles.cardLabel, { color: colors.textSecondary }]}>km total</Text>
-        <Text style={[styles.cardValue, { color: colors.text }]}>{totalKm}</Text>
-      </Card>
+      <View style={styles.cardPair}>
+        <Card style={styles.card}>
+          <Text
+            style={[styles.caption, { color: colors.textSecondary }]}
+            numberOfLines={1}>
+            Lucro líquido
+          </Text>
+          <Text
+            style={[
+              styles.value,
+              { color: netProfit >= 0 ? colors.positive : colors.negative },
+            ]}
+            numberOfLines={1}>
+            {formatCurrency(netProfit)}
+          </Text>
+        </Card>
+        <Card style={styles.card}>
+          <Text
+            style={[styles.caption, { color: colors.textSecondary }]}
+            numberOfLines={1}>
+            km total
+          </Text>
+          <Text
+            style={[styles.value, { color: colors.text }]}
+            numberOfLines={1}>
+            {totalKm}
+          </Text>
+        </Card>
+      </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
     gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
   },
-  card: { width: '48%', alignItems: 'center' },
-  cardLabel: { fontSize: fontSize.xs, marginBottom: spacing.xs },
-  cardValue: { fontSize: fontSize.md, fontWeight: 'bold' },
+  cardPair: { flexDirection: 'row', gap: spacing.sm },
+  card: { flex: 1, alignItems: 'center', paddingVertical: spacing.md },
+  caption: { ...typography.caption, marginBottom: spacing.xs },
+  value: { ...typography.tabular, fontSize: typography.h3.fontSize, fontWeight: '700' },
 });

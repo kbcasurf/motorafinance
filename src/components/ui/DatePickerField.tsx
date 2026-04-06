@@ -76,9 +76,10 @@ interface TimePickerFieldProps {
   label: string;
   value: string; // 'HH:mm'
   onChange: (value: string) => void;
+  error?: string;
 }
 
-export function TimePickerField({ label, value, onChange }: TimePickerFieldProps) {
+export function TimePickerField({ label, value, onChange, error }: TimePickerFieldProps) {
   const colors = useThemeColors();
   const [show, setShow] = useState(false);
 
@@ -97,7 +98,10 @@ export function TimePickerField({ label, value, onChange }: TimePickerFieldProps
         <View
           style={[
             styles.iosPickerWrapper,
-            { backgroundColor: colors.surface, borderColor: colors.border },
+            {
+              backgroundColor: colors.surface,
+              borderColor: error ? colors.negative : colors.border,
+            },
           ]}
         >
           <DateTimePicker
@@ -114,7 +118,10 @@ export function TimePickerField({ label, value, onChange }: TimePickerFieldProps
             onPress={() => setShow(true)}
             style={[
               styles.pressable,
-              { backgroundColor: colors.surface, borderColor: colors.border },
+              {
+                backgroundColor: colors.surface,
+                borderColor: error ? colors.negative : colors.border,
+              },
             ]}
           >
             <Text style={{ color: value ? colors.text : colors.textSecondary, fontSize: fontSize.md }}>
@@ -127,6 +134,7 @@ export function TimePickerField({ label, value, onChange }: TimePickerFieldProps
           )}
         </>
       )}
+      {error && <Text style={[styles.error, { color: colors.negative }]}>{error}</Text>}
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { Alert, View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ExpenseForm } from '../../../src/components/forms/ExpenseForm';
 import { getExpenseById, updateExpense } from '../../../src/db/queries/expenses';
@@ -21,8 +21,14 @@ export default function EditExpenseScreen() {
 
   async function handleSubmit(updated: NewExpense) {
     if (!id) return;
-    await updateExpense(id, updated);
-    router.back();
+    try {
+      await updateExpense(id, updated);
+      router.back();
+    } catch (e) {
+      const err = e as Error;
+      console.error('Erro ao atualizar despesa:', err);
+      Alert.alert('Erro', 'Não foi possível atualizar a despesa. Tente novamente.');
+    }
   }
 
   if (loading) {

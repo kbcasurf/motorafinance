@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `income_date_unique` ON `income` (`date`);

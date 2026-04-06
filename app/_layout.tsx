@@ -1,43 +1,62 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import { ErrorBoundary } from '../src/components/ErrorBoundary';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import { drizzle } from 'drizzle-orm/expo-sqlite';
-import { openDatabaseSync } from 'expo-sqlite';
-import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
+import { migrate } from 'drizzle-orm/expo-sqlite/migrator';
+import { db, expoDb } from '../src/db/client';
 import migrations from '../drizzle/migrations/migrations';
 import { useSettingsStore } from '../src/stores/useSettingsStore';
 import { useThemeColors } from '../src/theme';
 import { useFonts, Exo2_700Bold } from '@expo-google-fonts/exo-2';
+import { validateSchema, resetDatabase } from '../src/db/validateAndSync';
 
-const expo = openDatabaseSync('motorafinance.db', {
-  enableChangeListener: true,
-});
+export { db };
 
-export const db = drizzle(expo);
-
+/**
+ * Imperative migration flow: instead of useMigrations (a React hook that
+ * cannot be re-mounted from React Native), we call migrate() directly
+ * inside a useEffect, giving us full control over the lifecycle.
+ */
 export default function RootLayout() {
-  const { success, error } = useMigrations(db, migrations);
+  const [status, setStatus] = useState<'migrating' | 'migrated' | 'error'>('migrating');
+  const [errorMsg, setErrorMsg] = useState('');
   const hydrateSettings = useSettingsStore((s) => s.hydrate);
   const colors = useThemeColors();
   const [fontsLoaded] = useFonts({ Exo2_700Bold });
 
-  useEffect(() => {
-    if (success) {
+  const runMigrations = useCallback(async () => {
+    try {
+      await migrate(db, migrations);
+      const ok = await validateSchema();
+      if (!ok) {
+        // Migrations reported success but schema is still stale — reset and retry
+        await resetDatabase();
+        await migrate(db, migrations);
+      }
       hydrateSettings();
+      setStatus('migrated');
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Migration failed:', err);
+      setErrorMsg(err instanceof Error ? err.message : String(err));
+      setStatus('error');
     }
-  }, [success, hydrateSettings]);
+  }, [hydrateSettings]);
 
-  if (error) {
+  useEffect(() => {
+    runMigrations();
+  }, [runMigrations]);
+
+  if (status === 'error') {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
         <Text style={[styles.error, { color: colors.negative }]}>Erro ao inicializar banco de dados</Text>
-        <Text style={[styles.errorDetail, { color: colors.textSecondary }]}>{error.message}</Text>
+        <Text style={[styles.errorDetail, { color: colors.textSecondary }]}>{errorMsg}</Text>
       </View>
     );
   }
 
-  if (!success || !fontsLoaded) {
+  if (status !== 'migrated' || !fontsLoaded) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.primary} />

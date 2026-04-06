@@ -41,8 +41,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "435a34b5-22aa-4fc9-aa39-a3b91162f251"
+        "projectId": "c75aa739-1faa-4c29-8b9c-f6d9ef7205de"
       }
-    }
+    },
+    "owner": "kbcasurf"
   }
 }

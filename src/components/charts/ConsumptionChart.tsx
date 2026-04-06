@@ -1,59 +1,40 @@
-// src/components/charts/ProfitChart.tsx
+// src/components/charts/ConsumptionChart.tsx
 import { View, Text, StyleSheet } from 'react-native';
 import { CartesianChart, BarGroup } from 'victory-native';
 import { useThemeColors, spacing, typography } from '../../theme';
-import type { DailyAggregate } from '../../db/queries/reports';
 
-interface ProfitChartProps {
-  incomeByDay: DailyAggregate[];
-  expensesByDay: DailyAggregate[];
+interface ConsumptionChartProps {
+  urbanKmL: number | null;
+  highwayKmL: number | null;
 }
 
 interface ChartDatum extends Record<string, unknown> {
-  day: string;
-  revenue: number;
-  expenses: number;
+  x: number;
+  urban: number;
+  highway: number;
 }
 
-export function ProfitChart({ incomeByDay, expensesByDay }: ProfitChartProps) {
+export function ConsumptionChart({ urbanKmL, highwayKmL }: ConsumptionChartProps) {
   const colors = useThemeColors();
 
-  // Merge into single array keyed by date
-  const dateSet = new Set([
-    ...incomeByDay.map((d) => d.date),
-    ...expensesByDay.map((d) => d.date),
-  ]);
+  if (urbanKmL === null && highwayKmL === null) return null;
 
-  const incomeMap = new Map(incomeByDay.map((d) => [d.date, d.total]));
-  const expenseMap = new Map(expensesByDay.map((d) => [d.date, d.total]));
-
-  const data: ChartDatum[] = Array.from(dateSet)
-    .sort()
-    .map((date) => {
-      const [, month, day] = date.split('-');
-      return {
-      day: `${day}/${month}`, // DD/MM for x-axis labels
-      revenue: (incomeMap.get(date) ?? 0) / 100,
-      expenses: (expenseMap.get(date) ?? 0) / 100,
-      };
-    });
-
-  if (data.length === 0) {
-    return null;
-  }
+  const data: ChartDatum[] = [
+    { x: 1, urban: urbanKmL ?? 0, highway: highwayKmL ?? 0 },
+  ];
 
   return (
     <View style={styles.container}>
       <Text style={[styles.title, { color: colors.textSecondary }]}>
-        Receita x Despesas
+        Consumo médio real (km/L)
       </Text>
       <View style={styles.chartWrapper}>
         <CartesianChart
           data={data}
-          xKey="day"
-          yKeys={['revenue', 'expenses']}
+          xKey="x"
+          yKeys={['urban', 'highway']}
           domain={{ y: [0] }}
-          domainPadding={{ left: 30, right: 30, top: 20 }}
+          domainPadding={{ left: 60, right: 60, top: 20 }}
         >
           {({ points, chartBounds }) => (
             <BarGroup
@@ -62,13 +43,13 @@ export function ProfitChart({ incomeByDay, expensesByDay }: ProfitChartProps) {
               withinGroupPadding={0.1}
             >
               <BarGroup.Bar
-                points={points.revenue}
-                color={colors.positive}
+                points={points.urban}
+                color={colors.primary}
                 animate={{ type: 'timing' }}
               />
               <BarGroup.Bar
-                points={points.expenses}
-                color={colors.negative}
+                points={points.highway}
+                color={colors.positive}
                 animate={{ type: 'timing' }}
               />
             </BarGroup>
@@ -77,12 +58,16 @@ export function ProfitChart({ incomeByDay, expensesByDay }: ProfitChartProps) {
       </View>
       <View style={styles.legend}>
         <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.positive }]} />
-          <Text style={[styles.legendText, { color: colors.textSecondary }]}>Receita</Text>
+          <View style={[styles.legendDot, { backgroundColor: colors.primary }]} />
+          <Text style={[styles.legendText, { color: colors.textSecondary }]}>
+            Urbano{urbanKmL !== null ? ` (${urbanKmL.toFixed(1)} km/L)` : ''}
+          </Text>
         </View>
         <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: colors.negative }]} />
-          <Text style={[styles.legendText, { color: colors.textSecondary }]}>Despesa</Text>
+          <View style={[styles.legendDot, { backgroundColor: colors.positive }]} />
+          <Text style={[styles.legendText, { color: colors.textSecondary }]}>
+            Estrada{highwayKmL !== null ? ` (${highwayKmL.toFixed(1)} km/L)` : ''}
+          </Text>
         </View>
       </View>
     </View>

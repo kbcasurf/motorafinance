@@ -2,7 +2,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Card } from '../ui/Card';
 import { formatCurrency } from '../../utils/currency';
-import { useThemeColors, spacing, fontSize, borderRadius } from '../../theme';
+import { useThemeColors, spacing, typography } from '../../theme';
 
 interface GoalProgressProps {
   netProfit: number;
@@ -18,7 +18,7 @@ export function GoalProgress({ netProfit, goalCents }: GoalProgressProps) {
 
   return (
     <View style={styles.container}>
-      <Card>
+      <Card style={styles.card}>
         <Text style={[styles.title, { color: colors.textSecondary }]}>Meta mensal</Text>
         <View style={styles.row}>
           <Text style={[styles.current, { color: colors.text }]}>
@@ -48,19 +48,20 @@ export function GoalProgress({ netProfit, goalCents }: GoalProgressProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: spacing.md, paddingTop: spacing.sm },
-  title: { fontSize: fontSize.sm, fontWeight: '600', marginBottom: spacing.sm },
+  container: { paddingHorizontal: spacing.lg, paddingTop: spacing.sm },
+  card: { paddingVertical: spacing.md },
+  title: { ...typography.caption, fontWeight: '600', marginBottom: spacing.sm },
   row: { flexDirection: 'row', alignItems: 'baseline', marginBottom: spacing.sm },
-  current: { fontSize: fontSize.lg, fontWeight: 'bold' },
-  goal: { fontSize: fontSize.sm, marginLeft: spacing.xs },
+  current: { ...typography.h2, fontWeight: '700' },
+  goal: { ...typography.caption, marginLeft: spacing.xs },
   trackOuter: {
     height: 8,
-    borderRadius: borderRadius.full,
+    borderRadius: 9999,
     overflow: 'hidden',
   },
   trackInner: {
     height: '100%',
-    borderRadius: borderRadius.full,
+    borderRadius: 9999,
   },
-  percentage: { fontSize: fontSize.xs, textAlign: 'right', marginTop: spacing.xs },
+  percentage: { ...typography.caption, textAlign: 'right', marginTop: spacing.xs },
 });

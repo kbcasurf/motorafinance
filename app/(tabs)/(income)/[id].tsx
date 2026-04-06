@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { Alert, View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { IncomeForm } from '../../../src/components/forms/IncomeForm';
 import { getIncomeById, updateIncome } from '../../../src/db/queries/income';
@@ -21,8 +21,14 @@ export default function EditIncomeScreen() {
 
   async function handleSubmit(updated: NewIncome) {
     if (!id) return;
-    await updateIncome(id, updated);
-    router.back();
+    try {
+      await updateIncome(id, updated);
+      router.back();
+    } catch (e) {
+      const err = e as Error;
+      console.error('Erro ao atualizar receita:', err);
+      Alert.alert('Erro', 'Não foi possível atualizar a receita. Tente novamente.');
+    }
   }
 
   if (loading) {

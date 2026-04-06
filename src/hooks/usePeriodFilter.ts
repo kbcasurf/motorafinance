@@ -50,11 +50,14 @@ export function usePeriodFilter(): PeriodFilter {
         lbl = `${format(start, 'dd/MM')} - ${format(end, 'dd/MM')}`;
         break;
       case 'month':
-      default:
         start = startOfMonth(anchor);
         end = endOfMonth(anchor);
         lbl = format(anchor, "MMMM 'de' yyyy", { locale: ptBR });
         break;
+      default: {
+        const _exhaustiveCheck: never = periodType;
+        throw new Error(`Unknown periodType: ${_exhaustiveCheck}`);
+      }
     }
 
     return {

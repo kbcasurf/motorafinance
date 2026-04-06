@@ -1,24 +1,23 @@
+import { useMemo } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { useLiveExpenses } from '../../../src/hooks/useLiveExpenses';
 import { deleteExpense } from '../../../src/db/queries/expenses';
 import { formatCurrency } from '../../../src/utils/currency';
 import { SwipeableRow } from '../../../src/components/ui/SwipeableRow';
 import { Card } from '../../../src/components/ui/Card';
-import { useThemeColors, spacing, fontSize, borderRadius } from '../../../src/theme';
+import { useThemeColors, spacing, typography } from '../../../src/theme';
 import { DEFAULT_EXPENSE_CATEGORIES } from '../../../src/constants/categories';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { usePeriodFilter } from '../../../src/hooks/usePeriodFilter';
 
 export default function ExpenseListScreen() {
   const colors = useThemeColors();
   const router = useRouter();
-  const now = new Date();
-  const startDate = format(startOfMonth(now), 'yyyy-MM-dd');
-  const endDate = format(endOfMonth(now), 'yyyy-MM-dd');
+  const { startDate, endDate, label } = usePeriodFilter();
   const { data: expenses } = useLiveExpenses(startDate, endDate);
 
-  const total = expenses.reduce((sum, row) => sum + row.amount, 0);
+  const total = useMemo(() => expenses.reduce((sum, row) => sum + row.amount, 0), [expenses]);
 
   function getCategoryLabel(categoryId: string): string {
     return (
@@ -31,7 +30,7 @@ export default function ExpenseListScreen() {
       <View
         style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}
       >
-        <Text style={[styles.headerLabel, { color: colors.textSecondary }]}>Total do mês</Text>
+        <Text style={[styles.headerLabel, { color: colors.textSecondary }]}>Total: {label}</Text>
         <Text style={[styles.headerTotal, { color: colors.negative }]}>
           {formatCurrency(total)}
         </Text>
@@ -41,6 +40,14 @@ export default function ExpenseListScreen() {
         data={expenses}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary }]}>
+            <Text style={[styles.infoTitle, { color: colors.text }]}>O que registrar aqui?</Text>
+            <Text style={[styles.infoBody, { color: colors.textSecondary }]}>
+              Registre os custos relacionados ao seu trabalho — combustível, manutenção, lavagem, seguro e outros. Essas despesas são usadas para calcular seu lucro líquido mensal.
+            </Text>
+          </View>
+        }
         ListEmptyComponent={
           <View style={styles.empty}>
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
@@ -52,7 +59,7 @@ export default function ExpenseListScreen() {
           </View>
         }
         renderItem={({ item }) => (
-          <SwipeableRow onDelete={() => deleteExpense(item.id)}>
+          <SwipeableRow onDelete={() => deleteExpense(item.id)} description="esta despesa">
             <Pressable onPress={() => router.push(`/(expenses)/${item.id}`)}>
               <Card style={styles.card}>
                 <View style={styles.cardRow}>
@@ -92,25 +99,28 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignItems: 'center',
   },
-  headerLabel: { fontSize: fontSize.sm },
-  headerTotal: { fontSize: fontSize.xl, fontWeight: 'bold', marginTop: spacing.xs },
+  headerLabel: { fontSize: typography.caption.fontSize },
+  headerTotal: { fontSize: typography.h2.fontSize, fontWeight: '700', marginTop: spacing.xs },
   list: { padding: spacing.sm },
   card: { marginBottom: spacing.sm },
   cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   cardLeft: { flex: 1 },
-  cardAmount: { fontSize: fontSize.lg, fontWeight: '600' },
-  cardMeta: { fontSize: fontSize.sm, marginTop: 2 },
-  cardDate: { fontSize: fontSize.xs, textAlign: 'right' },
+  cardAmount: { fontSize: typography.h3.fontSize, fontWeight: '700' },
+  cardMeta: { fontSize: typography.body.fontSize, marginTop: 2 },
+  cardDate: { fontSize: typography.caption.fontSize, textAlign: 'right' },
   empty: { alignItems: 'center', marginTop: spacing.xxl, padding: spacing.lg },
-  emptyText: { fontSize: fontSize.md, textAlign: 'center' },
-  emptyHint: { fontSize: fontSize.sm, textAlign: 'center', marginTop: spacing.sm },
+  emptyText: { fontSize: typography.body.fontSize, textAlign: 'center' },
+  emptyHint: { fontSize: typography.caption.fontSize, textAlign: 'center', marginTop: spacing.sm },
+  infoBox: { borderRadius: 20, padding: spacing.lg, marginBottom: spacing.sm },
+  infoTitle: { fontSize: typography.body.fontSize, fontWeight: '600', marginBottom: spacing.xs },
+  infoBody: { fontSize: typography.body.fontSize, lineHeight: 20 },
   fab: {
     position: 'absolute',
     bottom: spacing.lg,
     right: spacing.lg,
     width: 56,
     height: 56,
-    borderRadius: borderRadius.full,
+    borderRadius: 9999,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,

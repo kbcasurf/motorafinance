@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { format } from 'date-fns';
 import { Input } from '../ui/Input';
@@ -26,10 +26,13 @@ export function ExpenseForm({
   const colors = useThemeColors();
   const { data: customCats } = useLiveCustomCategories();
 
-  const allCategories = [
-    ...DEFAULT_EXPENSE_CATEGORIES,
-    ...customCats.map((c) => ({ id: c.id, label: c.name })),
-  ];
+  const allCategories = useMemo(
+    () => [
+      ...DEFAULT_EXPENSE_CATEGORIES,
+      ...customCats.map((c) => ({ id: c.id, label: c.name })),
+    ],
+    [customCats],
+  );
 
   const [amount, setAmount] = useState(
     initialData ? centsToDecimal(initialData.amount).toString() : '',

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import { Input } from '../ui/Input';
 import { Button } from '../ui/Button';
@@ -9,12 +10,19 @@ import { parseCurrencyToCents, centsToDecimal } from '../../utils/currency';
 import { PLATFORMS } from '../../constants/categories';
 import type { Income, NewIncome } from '../../db/queries/income';
 
+const ROUTE_TYPES = [
+  { id: 'urban' as const, label: 'Urbano' },
+  { id: 'highway' as const, label: 'Em viagem' },
+];
+
 interface IncomeFormProps {
   initialData?: Income;
   defaultPlatform?: string;
   defaultOdoStart?: number | null;
   onSubmit: (data: NewIncome) => Promise<void>;
   submitLabel: string;
+  dateError?: string;
+  onClearDateError?: () => void;
 }
 
 export function IncomeForm({
@@ -23,6 +31,8 @@ export function IncomeForm({
   defaultOdoStart = null,
   onSubmit,
   submitLabel,
+  dateError,
+  onClearDateError,
 }: IncomeFormProps) {
   const colors = useThemeColors();
   const now = new Date();
@@ -37,7 +47,15 @@ export function IncomeForm({
   );
   const [odoEnd, setOdoEnd] = useState(initialData?.odoEnd?.toString() ?? '');
   const [date, setDate] = useState(initialData?.date ?? format(now, 'yyyy-MM-dd'));
-  const [time, setTime] = useState(initialData?.time ?? format(now, 'HH:mm'));
+  function handleDateChange(value: string) {
+    setDate(value);
+    onClearDateError?.();
+  }
+  const [timeStart, setTimeStart] = useState(initialData?.timeStart ?? '00:00');
+  const [timeEnd, setTimeEnd] = useState(initialData?.timeEnd ?? '23:59');
+  const [routeType, setRouteType] = useState<'urban' | 'highway'>(
+    initialData?.routeType === 'highway' ? 'highway' : 'urban',
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -50,16 +68,24 @@ export function IncomeForm({
     if (platform === 'other' && platformCustom.trim() === '') {
       newErrors.platformCustom = 'Informe o nome da plataforma';
     }
+    if (!odoStart || odoStart.trim() === '') {
+      newErrors.odoStart = 'Odômetro início é obrigatório';
+    }
+    if (!odoEnd || odoEnd.trim() === '') {
+      newErrors.odoEnd = 'Odômetro fim é obrigatório';
+    }
     if (odoStart && odoEnd) {
       const start = parseInt(odoStart, 10);
       const end = parseInt(odoEnd, 10);
       if (!isNaN(start) && !isNaN(end) && end < start) {
-        newErrors.odoEnd = 'Odometro fim deve ser >= inicio';
+        newErrors.odoEnd = 'Odômetro fim deve ser maior ou igual ao início';
       }
     }
     if (!date) {
-      newErrors.date = 'Data e obrigatoria';
+      newErrors.date = 'Data é obrigatória';
     }
+    if (!timeStart) newErrors.timeStart = 'Hora início é obrigatória';
+    if (!timeEnd) newErrors.timeEnd = 'Hora fim é obrigatória';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
@@ -75,7 +101,9 @@ export function IncomeForm({
         odoStart: odoStart ? parseInt(odoStart, 10) : null,
         odoEnd: odoEnd ? parseInt(odoEnd, 10) : null,
         date,
-        time: time || null,
+        timeStart,
+        timeEnd,
+        routeType,
       });
     } finally {
       setSubmitting(false);
@@ -88,6 +116,15 @@ export function IncomeForm({
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     >
+      {!initialData && (
+        <View style={[styles.infoBanner, { backgroundColor: colors.surfaceSecondary }]}>
+          <Feather name="info" size={14} color={colors.textSecondary} />
+          <Text style={[styles.infoBannerText, { color: colors.textSecondary }]}>
+            Registre uma entrada por dia com todos os seus ganhos
+          </Text>
+        </View>
+      )}
+
       <Input
         label="Valor (R$)"
         value={amount}
@@ -98,13 +135,13 @@ export function IncomeForm({
       />
 
       <Text style={[styles.label, { color: colors.textSecondary }]}>Plataforma</Text>
-      <View style={styles.platformRow}>
+      <View style={styles.chipRow}>
         {PLATFORMS.map((p) => (
           <Pressable
             key={p.id}
             onPress={() => setPlatform(p.id)}
             style={[
-              styles.platformChip,
+              styles.chip,
               {
                 backgroundColor: platform === p.id ? colors.primary : colors.surfaceSecondary,
                 borderColor: platform === p.id ? colors.primary : colors.border,
@@ -113,7 +150,7 @@ export function IncomeForm({
           >
             <Text
               style={[
-                styles.platformChipText,
+                styles.chipText,
                 { color: platform === p.id ? colors.primaryText : colors.text },
               ]}
             >
@@ -133,34 +170,78 @@ export function IncomeForm({
         />
       )}
 
+      <Text style={[styles.label, { color: colors.textSecondary }]}>Tipo de trajeto</Text>
+      <View style={styles.chipRow}>
+        {ROUTE_TYPES.map((r) => (
+          <Pressable
+            key={r.id}
+            onPress={() => setRouteType(r.id)}
+            style={[
+              styles.chip,
+              {
+                backgroundColor: routeType === r.id ? colors.primary : colors.surfaceSecondary,
+                borderColor: routeType === r.id ? colors.primary : colors.border,
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.chipText,
+                { color: routeType === r.id ? colors.primaryText : colors.text },
+              ]}
+            >
+              {r.label}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
       <View style={styles.row}>
         <View style={styles.halfField}>
           <Input
-            label="Odometro inicio (km)"
+            label="Odômetro início (km)"
             value={odoStart}
             onChangeText={setOdoStart}
             keyboardType="numeric"
-            placeholder="Opcional"
+            placeholder=""
+            error={errors.odoStart}
           />
         </View>
         <View style={styles.halfField}>
           <Input
-            label="Odometro fim (km)"
+            label="Odômetro fim (km)"
             value={odoEnd}
             onChangeText={setOdoEnd}
             keyboardType="numeric"
-            placeholder="Opcional"
+            placeholder=""
             error={errors.odoEnd}
           />
         </View>
       </View>
 
+      <DatePickerField
+        label="Data"
+        value={date}
+        onChange={handleDateChange}
+        error={errors.date ?? dateError}
+      />
+
       <View style={styles.row}>
         <View style={styles.halfField}>
-          <DatePickerField label="Data" value={date} onChange={setDate} error={errors.date} />
+          <TimePickerField
+            label="Hora início"
+            value={timeStart}
+            onChange={setTimeStart}
+            error={errors.timeStart}
+          />
         </View>
         <View style={styles.halfField}>
-          <TimePickerField label="Hora" value={time} onChange={setTime} />
+          <TimePickerField
+            label="Hora fim"
+            value={timeEnd}
+            onChange={setTimeEnd}
+            error={errors.timeEnd}
+          />
         </View>
       </View>
 
@@ -175,19 +256,28 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { padding: spacing.md },
   label: { fontSize: fontSize.sm, marginBottom: spacing.xs, fontWeight: '500' },
-  platformRow: {
+  infoBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    padding: spacing.sm,
+    borderRadius: borderRadius.md,
+    marginBottom: spacing.md,
+  },
+  infoBannerText: { fontSize: fontSize.sm, flex: 1 },
+  chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
     marginBottom: spacing.md,
   },
-  platformChip: {
+  chip: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.sm + 4,
     borderRadius: borderRadius.full,
     borderWidth: 1,
   },
-  platformChipText: { fontSize: fontSize.sm, fontWeight: '500' },
+  chipText: { fontSize: fontSize.sm, fontWeight: '500' },
   row: { flexDirection: 'row', gap: spacing.sm },
   halfField: { flex: 1 },
   submitArea: { marginTop: spacing.lg },

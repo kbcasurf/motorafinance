@@ -10,7 +10,7 @@ import { exportAndShareCsv } from '../../src/utils/export';
 import { parseCurrencyToCents, centsToDecimal } from '../../src/utils/currency';
 import { wipeAllData } from '../../src/db/queries/wipe';
 import { db } from '../../src/db/client';
-import { income, expenses } from '../../src/db/schema';
+import { income, expenses, extras } from '../../src/db/schema';
 import { between } from 'drizzle-orm';
 import { useThemeColors, spacing, fontSize } from '../../src/theme';
 import * as Haptics from 'expo-haptics';
@@ -25,12 +25,22 @@ export default function SettingsScreen() {
     hydrated,
     hydrate,
     updateSetting,
+    tankCapacityMl,
+    consumptionEthanolUrban,
+    consumptionEthanolHighway,
+    consumptionGasolineUrban,
+    consumptionGasolineHighway,
   } = useSettingsStore();
 
   const [nameInput, setNameInput] = useState('');
   const [vehicleInput, setVehicleInput] = useState('');
   const [goalInput, setGoalInput] = useState('');
   const [exporting, setExporting] = useState(false);
+  const [tankInput, setTankInput] = useState('');
+  const [ethUrbanInput, setEthUrbanInput] = useState('');
+  const [ethHighwayInput, setEthHighwayInput] = useState('');
+  const [gasUrbanInput, setGasUrbanInput] = useState('');
+  const [gasHighwayInput, setGasHighwayInput] = useState('');
 
   useEffect(() => {
     if (!hydrated) {
@@ -43,8 +53,35 @@ export default function SettingsScreen() {
       setNameInput(driverName);
       setVehicleInput(vehicleModel);
       setGoalInput(monthlyGoal ? centsToDecimal(parseInt(monthlyGoal, 10)).toString() : '');
+      setTankInput(tankCapacityMl ? (parseInt(tankCapacityMl, 10) / 1000).toString() : '');
+      setEthUrbanInput(
+        consumptionEthanolUrban ? (parseInt(consumptionEthanolUrban, 10) / 10).toFixed(1) : '',
+      );
+      setEthHighwayInput(
+        consumptionEthanolHighway
+          ? (parseInt(consumptionEthanolHighway, 10) / 10).toFixed(1)
+          : '',
+      );
+      setGasUrbanInput(
+        consumptionGasolineUrban ? (parseInt(consumptionGasolineUrban, 10) / 10).toFixed(1) : '',
+      );
+      setGasHighwayInput(
+        consumptionGasolineHighway
+          ? (parseInt(consumptionGasolineHighway, 10) / 10).toFixed(1)
+          : '',
+      );
     }
-  }, [hydrated, driverName, vehicleModel, monthlyGoal]);
+  }, [
+    hydrated,
+    driverName,
+    vehicleModel,
+    monthlyGoal,
+    tankCapacityMl,
+    consumptionEthanolUrban,
+    consumptionEthanolHighway,
+    consumptionGasolineUrban,
+    consumptionGasolineHighway,
+  ]);
 
   function handleSaveName() {
     updateSetting('driver_name', nameInput.trim());
@@ -57,6 +94,18 @@ export default function SettingsScreen() {
   function handleSaveGoal() {
     const cents = parseCurrencyToCents(goalInput);
     updateSetting('monthly_goal', cents.toString());
+  }
+
+  function handleSaveTank() {
+    const val = parseFloat(tankInput);
+    if (!tankInput.trim() || isNaN(val)) return;
+    updateSetting('tank_capacity_ml', Math.round(val * 1000).toString());
+  }
+
+  function handleSaveKmL(key: string, input: string) {
+    const val = parseFloat(input);
+    if (!input.trim() || isNaN(val)) return;
+    updateSetting(key, Math.round(val * 10).toString());
   }
 
   async function handleExport() {
@@ -74,13 +123,20 @@ export default function SettingsScreen() {
         .select()
         .from(expenses)
         .where(between(expenses.date, startDate, endDate));
+      const extraRows = await db
+        .select()
+        .from(extras)
+        .where(between(extras.date, startDate, endDate));
 
       await exportAndShareCsv(
         incomeRows,
         expenseRows,
+        extraRows,
         format(now, 'yyyy-MM'),
       );
-    } catch {
+    } catch (e) {
+      const err = e as Error;
+      console.error('Erro ao exportar dados:', err);
       Alert.alert('Erro', 'Nao foi possivel exportar os dados.');
     } finally {
       setExporting(false);
@@ -160,6 +216,64 @@ export default function SettingsScreen() {
       </Card>
 
       <Text style={[styles.sectionTitle, { color: colors.text, marginTop: spacing.lg }]}>
+        Consumo do veículo
+      </Text>
+      <Card>
+        <Input
+          label="Capacidade do tanque (L)"
+          value={tankInput}
+          onChangeText={setTankInput}
+          onBlur={handleSaveTank}
+          keyboardType="decimal-pad"
+          placeholder="Ex: 50"
+        />
+        <View style={styles.row}>
+          <View style={styles.halfField}>
+            <Input
+              label="Etanol - Urbano (km/L)"
+              value={ethUrbanInput}
+              onChangeText={setEthUrbanInput}
+              onBlur={() => handleSaveKmL('consumption_ethanol_urban', ethUrbanInput)}
+              keyboardType="decimal-pad"
+              placeholder="Ex: 10.5"
+            />
+          </View>
+          <View style={styles.halfField}>
+            <Input
+              label="Etanol - Rodovias (km/L)"
+              value={ethHighwayInput}
+              onChangeText={setEthHighwayInput}
+              onBlur={() => handleSaveKmL('consumption_ethanol_highway', ethHighwayInput)}
+              keyboardType="decimal-pad"
+              placeholder="Ex: 13.5"
+            />
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.halfField}>
+            <Input
+              label="Gasolina - Urbana (km/L)"
+              value={gasUrbanInput}
+              onChangeText={setGasUrbanInput}
+              onBlur={() => handleSaveKmL('consumption_gasoline_urban', gasUrbanInput)}
+              keyboardType="decimal-pad"
+              placeholder="Ex: 12.0"
+            />
+          </View>
+          <View style={styles.halfField}>
+            <Input
+              label="Gasolina - Rodovias (km/L)"
+              value={gasHighwayInput}
+              onChangeText={setGasHighwayInput}
+              onBlur={() => handleSaveKmL('consumption_gasoline_highway', gasHighwayInput)}
+              keyboardType="decimal-pad"
+              placeholder="Ex: 15.0"
+            />
+          </View>
+        </View>
+      </Card>
+
+      <Text style={[styles.sectionTitle, { color: colors.text, marginTop: spacing.lg }]}>
         Meta mensal
       </Text>
       <Card>
@@ -213,4 +327,6 @@ const styles = StyleSheet.create({
   bottomSpacer: { height: spacing.xxl },
   themeRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   themeLabel: { fontSize: fontSize.md },
+  row: { flexDirection: 'row', gap: spacing.sm },
+  halfField: { flex: 1 },
 });
