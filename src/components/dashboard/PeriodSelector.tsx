@@ -1,4 +1,5 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useThemeColors, spacing, fontSize, borderRadius } from '../../theme';
 import type { PeriodType } from '../../hooks/usePeriodFilter';
 
@@ -55,11 +56,11 @@ export function PeriodSelector({
 
       <View style={styles.navRow}>
         <Pressable onPress={onPrevious} style={styles.navBtn}>
-          <Text style={[styles.navArrow, { color: colors.primary }]}>{'<'}</Text>
+          <Feather name="chevron-left" size={20} color={colors.primary} />
         </Pressable>
         <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
         <Pressable onPress={onNext} style={styles.navBtn}>
-          <Text style={[styles.navArrow, { color: colors.primary }]}>{'>'}</Text>
+          <Feather name="chevron-right" size={20} color={colors.primary} />
         </Pressable>
       </View>
     </View>
@@ -87,8 +88,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   navBtn: {
-    padding: spacing.sm,
+    paddingVertical: 6,
+    paddingHorizontal: 8,
   },
-  navArrow: { fontSize: fontSize.xl, fontWeight: 'bold' },
   label: { fontSize: fontSize.md, fontWeight: '600', textTransform: 'capitalize' },
 });

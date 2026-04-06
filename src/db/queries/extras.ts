@@ -8,23 +8,35 @@ export type NewExtra = Omit<typeof extras.$inferInsert, 'id' | 'createdAt' | 'up
 
 export async function insertExtra(data: NewExtra): Promise<void> {
   const now = new Date().toISOString();
-  await db.insert(extras).values({
-    id: Crypto.randomUUID(),
-    ...data,
-    createdAt: now,
-    updatedAt: now,
-  });
+  try {
+    await db.insert(extras).values({
+      id: Crypto.randomUUID(),
+      ...data,
+      createdAt: now,
+      updatedAt: now,
+    });
+  } catch (err) {
+    throw new Error(`insertExtra failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 export async function updateExtra(id: string, data: Partial<NewExtra>): Promise<void> {
-  await db
-    .update(extras)
-    .set({ ...data, updatedAt: new Date().toISOString() })
-    .where(eq(extras.id, id));
+  try {
+    await db
+      .update(extras)
+      .set({ ...data, updatedAt: new Date().toISOString() })
+      .where(eq(extras.id, id));
+  } catch (err) {
+    throw new Error(`updateExtra failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 export async function deleteExtra(id: string): Promise<void> {
-  await db.delete(extras).where(eq(extras.id, id));
+  try {
+    await db.delete(extras).where(eq(extras.id, id));
+  } catch (err) {
+    throw new Error(`deleteExtra failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 export async function getExtraById(id: string): Promise<Extra | undefined> {

@@ -1,27 +1,26 @@
+import { useMemo, useCallback } from 'react';
 import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { useLiveIncomes } from '../../../src/hooks/useLiveIncomes';
 import { deleteIncome } from '../../../src/db/queries/income';
 import { formatCurrency } from '../../../src/utils/currency';
 import { SwipeableRow } from '../../../src/components/ui/SwipeableRow';
 import { Card } from '../../../src/components/ui/Card';
-import { useThemeColors, spacing, fontSize, borderRadius } from '../../../src/theme';
+import { useThemeColors, spacing, typography } from '../../../src/theme';
 import { PLATFORMS } from '../../../src/constants/categories';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useInitIncomeDefaults } from '../../../src/hooks/useInitIncomeDefaults';
+import { usePeriodFilter } from '../../../src/hooks/usePeriodFilter';
 
 export default function IncomeListScreen() {
   const colors = useThemeColors();
   const router = useRouter();
-  const now = new Date();
-  const startDate = format(startOfMonth(now), 'yyyy-MM-dd');
-  const endDate = format(endOfMonth(now), 'yyyy-MM-dd');
+  const { startDate, endDate, label } = usePeriodFilter();
   const { data: incomes } = useLiveIncomes(startDate, endDate);
 
   useInitIncomeDefaults();
 
-  const total = incomes.reduce((sum, row) => sum + row.amount, 0);
+  const total = useMemo(() => incomes.reduce((sum, row) => sum + row.amount, 0), [incomes]);
 
   function getPlatformLabel(platformId: string): string {
     return PLATFORMS.find((p) => p.id === platformId)?.label ?? platformId;
@@ -31,7 +30,7 @@ export default function IncomeListScreen() {
     <GestureHandlerRootView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
         <Text style={[styles.headerLabel, { color: colors.textSecondary }]}>
-          Total do mês
+          Total: {label}
         </Text>
         <Text style={[styles.headerTotal, { color: colors.positive }]}>
           {formatCurrency(total)}
@@ -43,7 +42,7 @@ export default function IncomeListScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
-          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border }]}>
+          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary }]}>
             <Text style={[styles.infoTitle, { color: colors.text }]}>O que registrar aqui?</Text>
             <Text style={[styles.infoBody, { color: colors.textSecondary }]}>
               Registre seus ganhos diários com plataformas como Chama27, Uber e 99. Um registro por dia, consolidando todos os ganhos do dia — valor recebido, quilometragem rodada e horários de trabalho.
@@ -70,7 +69,7 @@ export default function IncomeListScreen() {
               : null;
 
           return (
-            <SwipeableRow onDelete={() => deleteIncome(item.id)}>
+            <SwipeableRow onDelete={() => deleteIncome(item.id)} description="esta receita">
               <Pressable onPress={() => router.push(`/(income)/${item.id}`)}>
                 <Card style={styles.card}>
                   <View style={styles.cardRow}>
@@ -85,7 +84,6 @@ export default function IncomeListScreen() {
                     </View>
                     <Text style={[styles.cardDate, { color: colors.textSecondary }]}>
                       {item.date}
-                      {item.time ? `\n${item.time}` : ''}
                     </Text>
                   </View>
                 </Card>
@@ -112,28 +110,28 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignItems: 'center',
   },
-  headerLabel: { fontSize: fontSize.sm },
-  headerTotal: { fontSize: fontSize.xl, fontWeight: 'bold', marginTop: spacing.xs },
+  headerLabel: { fontSize: typography.caption.fontSize },
+  headerTotal: { fontSize: typography.h2.fontSize, fontWeight: '700', marginTop: spacing.xs },
   list: { padding: spacing.sm },
   card: { marginBottom: spacing.sm },
   cardRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   cardLeft: { flex: 1 },
-  cardAmount: { fontSize: fontSize.lg, fontWeight: '600' },
-  cardMeta: { fontSize: fontSize.sm, marginTop: 2 },
-  cardDate: { fontSize: fontSize.xs, textAlign: 'right' },
+  cardAmount: { fontSize: typography.h3.fontSize, fontWeight: '700' },
+  cardMeta: { fontSize: typography.body.fontSize, marginTop: 2 },
+  cardDate: { fontSize: typography.caption.fontSize, textAlign: 'right' },
   empty: { alignItems: 'center', marginTop: spacing.xxl, padding: spacing.lg },
-  emptyText: { fontSize: fontSize.md, textAlign: 'center' },
-  emptyHint: { fontSize: fontSize.sm, textAlign: 'center', marginTop: spacing.sm },
-  infoBox: { borderWidth: 1, borderRadius: borderRadius.lg, padding: spacing.md, marginBottom: spacing.md },
-  infoTitle: { fontSize: fontSize.sm, fontWeight: '600', marginBottom: spacing.xs },
-  infoBody: { fontSize: fontSize.sm, lineHeight: 20 },
+  emptyText: { fontSize: typography.body.fontSize, textAlign: 'center' },
+  emptyHint: { fontSize: typography.caption.fontSize, textAlign: 'center', marginTop: spacing.sm },
+  infoBox: { borderRadius: 20, padding: spacing.lg, marginBottom: spacing.sm },
+  infoTitle: { fontSize: typography.body.fontSize, fontWeight: '600', marginBottom: spacing.xs },
+  infoBody: { fontSize: typography.body.fontSize, lineHeight: 20 },
   fab: {
     position: 'absolute',
     bottom: spacing.lg,
     right: spacing.lg,
     width: 56,
     height: 56,
-    borderRadius: borderRadius.full,
+    borderRadius: 9999,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,

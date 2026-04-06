@@ -29,19 +29,24 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   consumptionGasolineHighway: '',
 
   hydrate: async () => {
-    const all = await getAllSettings();
-    set({
-      driverName: all['driver_name'] ?? '',
-      vehicleModel: all['vehicle_model'] ?? '',
-      monthlyGoal: all['monthly_goal'] ?? '',
-      darkTheme: all['dark_theme'] === 'true',
-      hydrated: true,
-      tankCapacityMl: all['tank_capacity_ml'] ?? '',
-      consumptionEthanolUrban: all['consumption_ethanol_urban'] ?? '',
-      consumptionEthanolHighway: all['consumption_ethanol_highway'] ?? '',
-      consumptionGasolineUrban: all['consumption_gasoline_urban'] ?? '',
-      consumptionGasolineHighway: all['consumption_gasoline_highway'] ?? '',
-    });
+    try {
+      const all = await getAllSettings();
+      set({
+        driverName: all['driver_name'] ?? '',
+        vehicleModel: all['vehicle_model'] ?? '',
+        monthlyGoal: all['monthly_goal'] ?? '',
+        darkTheme: all['dark_theme'] === 'true',
+        hydrated: true,
+        tankCapacityMl: all['tank_capacity_ml'] ?? '',
+        consumptionEthanolUrban: all['consumption_ethanol_urban'] ?? '',
+        consumptionEthanolHighway: all['consumption_ethanol_highway'] ?? '',
+        consumptionGasolineUrban: all['consumption_gasoline_urban'] ?? '',
+        consumptionGasolineHighway: all['consumption_gasoline_highway'] ?? '',
+      });
+    } catch (error) {
+      console.error('Failed to hydrate settings:', error);
+      set({ hydrated: true });
+    }
   },
 
   updateSetting: async (key: string, value: string) => {

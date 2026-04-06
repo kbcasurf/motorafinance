@@ -25,7 +25,14 @@ export function Button({ title, onPress, variant = 'primary', disabled = false }
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      style={[styles.button, containerStyle]}
+      style={({ pressed }) => [
+        styles.button,
+        containerStyle,
+        {
+          opacity: disabled ? 0.4 : pressed ? 0.85 : 1,
+          transform: [{ scale: pressed ? 0.97 : 1 }],
+        },
+      ]}
     >
       <Text style={[styles.text, textStyle]}>{title}</Text>
     </Pressable>

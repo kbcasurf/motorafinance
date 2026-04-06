@@ -2,7 +2,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { Card } from '../ui/Card';
 import { formatCurrency } from '../../utils/currency';
-import { useThemeColors, spacing, fontSize } from '../../theme';
+import { useThemeColors, spacing, typography } from '../../theme';
 
 interface KpiIndicatorsProps {
   revenuePerKm: number;
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
   },
   card: { width: '48%', alignItems: 'center' },
-  label: { fontSize: fontSize.xs, marginBottom: spacing.xs },
-  value: { fontSize: fontSize.md, fontWeight: '600' },
+  label: { ...typography.caption, marginBottom: spacing.xs },
+  value: { ...typography.tabular, fontSize: typography.h3.fontSize, fontWeight: '600' },
 });

@@ -19,6 +19,15 @@ interface ExpenseRow {
   odoReading: number | null;
 }
 
+interface ExtraRow {
+  date: string;
+  odoStart: number;
+  odoEnd: number;
+  timeStart: string;
+  timeEnd: string;
+  routeType: string;
+}
+
 const CSV_HEADER =
   'Data,Tipo,Categoria/Plataforma,Valor (R$),Km Inicio,Km Fim,Km Percorrida,Descricao';
 
@@ -30,7 +39,7 @@ function escapeField(value: string | null | undefined): string {
   return value;
 }
 
-export function buildCsvContent(incomes: IncomeRow[], expenses: ExpenseRow[]): string {
+export function buildCsvContent(incomes: IncomeRow[], expenses: ExpenseRow[], extras: ExtraRow[]): string {
   const lines: string[] = [CSV_HEADER];
 
   for (const r of incomes) {
@@ -65,15 +74,32 @@ export function buildCsvContent(incomes: IncomeRow[], expenses: ExpenseRow[]): s
     );
   }
 
+  for (const x of extras) {
+    const kmDriven = (x.odoEnd - x.odoStart).toString();
+    lines.push(
+      [
+        x.date,
+        'Extra',
+        x.routeType === 'highway' ? 'Viagem' : 'Urbano',
+        '',
+        x.odoStart.toString(),
+        x.odoEnd.toString(),
+        kmDriven,
+        escapeField(`${x.timeStart} - ${x.timeEnd}`),
+      ].join(','),
+    );
+  }
+
   return lines.join('\n');
 }
 
 export async function exportAndShareCsv(
   incomes: IncomeRow[],
   expenses: ExpenseRow[],
+  extras: ExtraRow[],
   periodLabel: string,
 ): Promise<void> {
-  const content = buildCsvContent(incomes, expenses);
+  const content = buildCsvContent(incomes, expenses, extras);
   const fileName = `motorafinance-${periodLabel.replace(/\s+/g, '-')}.csv`;
   const filePath = `${FileSystem.cacheDirectory}${fileName}`;
 

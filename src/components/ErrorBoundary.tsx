@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { useThemeColors, spacing, fontSize, borderRadius } from '../theme';
 
 interface Props {
   children: React.ReactNode;
@@ -21,6 +22,10 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error };
   }
 
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    console.error('ErrorBoundary caught:', error, errorInfo.componentStack);
+  }
+
   handleReset = () => {
     this.setState({ hasError: false, error: null });
   };
@@ -29,19 +34,10 @@ export class ErrorBoundary extends React.Component<Props, State> {
     if (this.state.hasError) {
       if (this.props.silent) return null;
       return (
-        <View style={styles.container}>
-          <Text style={styles.emoji}>:(</Text>
-          <Text style={styles.title}>Algo deu errado</Text>
-          <Text style={styles.message}>
-            Ocorreu um erro inesperado. Tente novamente.
-          </Text>
-          {__DEV__ && this.state.error && (
-            <Text style={styles.debug}>{this.state.error.message}</Text>
-          )}
-          <Pressable style={styles.button} onPress={this.handleReset}>
-            <Text style={styles.buttonText}>Tentar novamente</Text>
-          </Pressable>
-        </View>
+        <ErrorFallback
+          error={this.state.error}
+          onRetry={this.handleReset}
+        />
       );
     }
 
@@ -49,30 +45,65 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 }
 
+function ErrorFallback({
+  error,
+  onRetry,
+}: {
+  error: Error | null;
+  onRetry: () => void;
+}) {
+  const colors = useThemeColors();
+
+  return (
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.emoji, { color: colors.textSecondary }]}>:(</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Algo deu errado</Text>
+      <Text style={[styles.message, { color: colors.textSecondary }]}>
+        Ocorreu um erro inesperado. Tente novamente.
+      </Text>
+      {__DEV__ && error && (
+        <Text style={styles.debug}>{error.message}</Text>
+      )}
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          {
+            backgroundColor: colors.primary,
+            opacity: pressed ? 0.85 : 1,
+            transform: [{ scale: pressed ? 0.97 : 1 }],
+          },
+        ]}
+        onPress={onRetry}
+      >
+        <Text style={styles.buttonText}>Tentar novamente</Text>
+      </Pressable>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 32,
-    backgroundColor: '#F9FAFB',
+    padding: spacing.xxl,
   },
-  emoji: { fontSize: 48, marginBottom: 16 },
-  title: { fontSize: 22, fontWeight: 'bold', color: '#111827', marginBottom: 8 },
-  message: { fontSize: 16, color: '#6B7280', textAlign: 'center', marginBottom: 16 },
+  emoji: { fontSize: 48, marginBottom: spacing.lg },
+  title: { fontSize: 22, fontWeight: '700', marginBottom: spacing.sm },
+  message: { fontSize: fontSize.md, textAlign: 'center', marginBottom: spacing.md },
   debug: {
-    fontSize: 12,
+    fontSize: fontSize.xs,
     color: '#DC2626',
     fontFamily: 'monospace',
     textAlign: 'center',
-    marginBottom: 16,
-    paddingHorizontal: 16,
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.md,
   },
   button: {
-    backgroundColor: '#2563EB',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 8,
+    paddingVertical: spacing.sm + 4,
+    paddingHorizontal: spacing.lg,
+    borderRadius: borderRadius.md,
   },
-  buttonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
+  buttonText: { color: '#FFFFFF', fontSize: fontSize.md, fontWeight: '600' },
 });
+

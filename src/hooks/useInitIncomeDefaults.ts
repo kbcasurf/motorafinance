@@ -12,6 +12,8 @@ export function useInitIncomeDefaults() {
       if (last.odoEnd != null) {
         setLastOdoEnd(last.odoEnd);
       }
+    }).catch((e) => {
+      console.error('Failed to load last income:', e);
     });
   }, [setLastPlatform, setLastOdoEnd]);
 }

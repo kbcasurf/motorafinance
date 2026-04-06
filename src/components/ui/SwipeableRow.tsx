@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Alert, View, Text, StyleSheet } from 'react-native';
 import { Swipeable, RectButton } from 'react-native-gesture-handler';
 import * as Haptics from 'expo-haptics';
 import { useThemeColors, spacing, fontSize } from '../../theme';
@@ -7,16 +7,28 @@ import { useThemeColors, spacing, fontSize } from '../../theme';
 interface SwipeableRowProps {
   children: React.ReactNode;
   onDelete: () => void;
+  description?: string;
 }
 
-export function SwipeableRow({ children, onDelete }: SwipeableRowProps) {
+export function SwipeableRow({ children, onDelete, description = 'este registro' }: SwipeableRowProps) {
   const swipeableRef = useRef<Swipeable>(null);
   const colors = useThemeColors();
 
   function handleDelete() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
     swipeableRef.current?.close();
-    onDelete();
+    Alert.alert(
+      'Confirmar exclusão',
+      `Deseja excluir ${description}? Essa ação não pode ser desfeita.`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Excluir',
+          style: 'destructive',
+          onPress: () => onDelete(),
+        },
+      ],
+    );
   }
 
   function renderRightActions() {

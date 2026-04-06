@@ -1,7 +1,7 @@
 // src/components/charts/ProfitChart.tsx
 import { View, Text, StyleSheet } from 'react-native';
 import { CartesianChart, BarGroup } from 'victory-native';
-import { useThemeColors, spacing, fontSize } from '../../theme';
+import { useThemeColors, spacing, typography } from '../../theme';
 import type { DailyAggregate } from '../../db/queries/reports';
 
 interface ProfitChartProps {
@@ -90,8 +90,8 @@ export function ProfitChart({ incomeByDay, expensesByDay }: ProfitChartProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { paddingHorizontal: spacing.md, paddingTop: spacing.md },
-  title: { fontSize: fontSize.sm, fontWeight: '600', marginBottom: spacing.sm },
+  container: { paddingHorizontal: spacing.lg, paddingTop: spacing.lg },
+  title: { ...typography.h3, marginBottom: spacing.md },
   chartWrapper: { height: 220 },
   legend: {
     flexDirection: 'row',
@@ -101,5 +101,5 @@ const styles = StyleSheet.create({
   },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   legendDot: { width: 10, height: 10, borderRadius: 5 },
-  legendText: { fontSize: fontSize.xs },
+  legendText: { ...typography.caption },
 });

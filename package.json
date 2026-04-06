@@ -9,7 +9,8 @@
     "web": "NODE_OPTIONS=--no-experimental-strip-types expo start --web",
     "postinstall": "patch-package",
     "test": "jest --passWithNoTests",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@expo-google-fonts/exo-2": "^0.4.2",

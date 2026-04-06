@@ -7,6 +7,10 @@ const palette = {
   red600: '#DC2626',
   blue500: '#3B82F6',
   blue600: '#2563EB',
+  greenAccent: '#A8FF3E',
+  redAccent: '#FF6B6B',
+  teal500: '#14B8A6',
+  tealLight: '#00D9C8',
   gray50: '#F9FAFB',
   gray100: '#F3F4F6',
   gray200: '#E5E7EB',
@@ -29,7 +33,7 @@ const lightColors = {
   textSecondary: palette.gray500,
   textInverse: palette.white,
   border: palette.gray200,
-  primary: palette.blue600,
+  primary: palette.teal500,
   primaryText: palette.white,
   positive: palette.green600,
   negative: palette.red600,
@@ -80,6 +84,19 @@ export const borderRadius = {
   xl: 16,
   full: 9999,
 } as const;
+
+// Typography scale with editorial intent.
+// tabular-nums ensures monetary values align vertically.
+// Negative letter-spacing on headings creates tighter, more intentional tracking.
+export const typography = {
+  display: { fontSize: 48, fontWeight: '700' as const, letterSpacing: -0.025, lineHeight: 56 } as const,
+  h1:      { fontSize: 32, fontWeight: '700' as const, letterSpacing: -0.02,  lineHeight: 40 } as const,
+  h2:      { fontSize: 24, fontWeight: '600' as const, letterSpacing: -0.015, lineHeight: 32 } as const,
+  h3:      { fontSize: 20, fontWeight: '600' as const, letterSpacing: -0.01,  lineHeight: 28 } as const,
+  body:    { fontSize: 15, fontWeight: '400' as const, letterSpacing: 0,     lineHeight: 22 } as const,
+  caption: { fontSize: 12, fontWeight: '400' as const, letterSpacing: 0.02,  lineHeight: 16 } as const,
+  tabular: { fontSize: 15, fontWeight: '500' as const, letterSpacing: -0.01, fontVariant: ['tabular-nums'] as ['tabular-nums'], lineHeight: 22 } as const,
+};
 
 export type ThemeColors = typeof lightColors;
 

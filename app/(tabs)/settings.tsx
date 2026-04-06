@@ -10,7 +10,7 @@ import { exportAndShareCsv } from '../../src/utils/export';
 import { parseCurrencyToCents, centsToDecimal } from '../../src/utils/currency';
 import { wipeAllData } from '../../src/db/queries/wipe';
 import { db } from '../../src/db/client';
-import { income, expenses } from '../../src/db/schema';
+import { income, expenses, extras } from '../../src/db/schema';
 import { between } from 'drizzle-orm';
 import { useThemeColors, spacing, fontSize } from '../../src/theme';
 import * as Haptics from 'expo-haptics';
@@ -123,13 +123,20 @@ export default function SettingsScreen() {
         .select()
         .from(expenses)
         .where(between(expenses.date, startDate, endDate));
+      const extraRows = await db
+        .select()
+        .from(extras)
+        .where(between(extras.date, startDate, endDate));
 
       await exportAndShareCsv(
         incomeRows,
         expenseRows,
+        extraRows,
         format(now, 'yyyy-MM'),
       );
-    } catch {
+    } catch (e) {
+      const err = e as Error;
+      console.error('Erro ao exportar dados:', err);
       Alert.alert('Erro', 'Nao foi possivel exportar os dados.');
     } finally {
       setExporting(false);

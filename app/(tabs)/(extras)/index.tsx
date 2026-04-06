@@ -31,7 +31,7 @@ export default function ExtrasListScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         ListHeaderComponent={
-          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary, borderColor: colors.border }]}>
+          <View style={[styles.infoBox, { backgroundColor: colors.surfaceSecondary }]}>
             <Text style={[styles.infoTitle, { color: colors.text }]}>O que registrar aqui?</Text>
             <Text style={[styles.infoBody, { color: colors.textSecondary }]}>
               Registre deslocamentos pessoais com o veículo de trabalho — compras, passeios, compromissos particulares. Esses km são descontados do cálculo de combustível, garantindo que só o custo profissional impacte seu lucro.
@@ -50,7 +50,7 @@ export default function ExtrasListScreen() {
           const dateLabel = format(parseISO(item.date), "dd MMM", { locale: ptBR });
 
           return (
-            <SwipeableRow onDelete={() => deleteExtra(item.id)}>
+            <SwipeableRow onDelete={() => deleteExtra(item.id)} description="este deslocamento">
               <Pressable onPress={() => router.push(`/(extras)/${item.id}`)}>
                 <Card style={styles.card}>
                   <View style={styles.cardRow}>
@@ -108,10 +108,9 @@ const styles = StyleSheet.create({
   badgeText: { fontSize: fontSize.xs, fontWeight: '600' },
   cardDate: { fontSize: fontSize.sm, textAlign: 'right' },
   infoBox: {
-    borderWidth: 1,
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
-    marginBottom: spacing.md,
+    borderRadius: 20,
+    padding: spacing.lg,
+    marginBottom: spacing.sm,
   },
   infoTitle: { fontSize: fontSize.sm, fontWeight: '600', marginBottom: spacing.xs },
   infoBody: { fontSize: fontSize.sm, lineHeight: 20 },

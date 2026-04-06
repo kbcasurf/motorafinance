@@ -50,6 +50,7 @@ coverage/
 # Claude Code
 .claude/settings.local.json
 CLAUDE.local.md
+.superpowers/
 
 # Docs (local only)
 docs/

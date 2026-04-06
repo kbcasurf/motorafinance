@@ -8,26 +8,38 @@ export type NewIncome = Omit<typeof income.$inferInsert, 'id' | 'createdAt' | 'u
 
 export async function insertIncome(data: NewIncome): Promise<void> {
   const now = new Date().toISOString();
-  await db.insert(income).values({
-    id: Crypto.randomUUID(),
-    ...data,
-    createdAt: now,
-    updatedAt: now,
-  });
+  try {
+    await db.insert(income).values({
+      id: Crypto.randomUUID(),
+      ...data,
+      createdAt: now,
+      updatedAt: now,
+    });
+  } catch (err) {
+    throw new Error(`insertIncome failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 export async function updateIncome(
   id: string,
   data: Partial<NewIncome>,
 ): Promise<void> {
-  await db
-    .update(income)
-    .set({ ...data, updatedAt: new Date().toISOString() })
-    .where(eq(income.id, id));
+  try {
+    await db
+      .update(income)
+      .set({ ...data, updatedAt: new Date().toISOString() })
+      .where(eq(income.id, id));
+  } catch (err) {
+    throw new Error(`updateIncome failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 export async function deleteIncome(id: string): Promise<void> {
-  await db.delete(income).where(eq(income.id, id));
+  try {
+    await db.delete(income).where(eq(income.id, id));
+  } catch (err) {
+    throw new Error(`deleteIncome failed: ${err instanceof Error ? err.message : String(err)}`);
+  }
 }
 
 export async function getIncomeById(id: string): Promise<Income | undefined> {

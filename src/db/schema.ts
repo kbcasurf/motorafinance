@@ -7,7 +7,7 @@ export const income = sqliteTable('income', {
   platformCustom: text('platform_custom'),
   odoStart: integer('odo_start'),
   odoEnd: integer('odo_end'),
-  date: text('date').notNull(),
+  date: text('date').notNull().unique(),
   time: text('time'), // deprecated: usar timeStart e timeEnd
   timeStart: text('time_start').notNull().default('00:00'),
   timeEnd: text('time_end').notNull().default('23:59'),
